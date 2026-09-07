@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D ULPIN – Unique Land Parcel Identification & Vertical Property Mapping System | SIH 2026 PS 229</title>
-    <meta name="description" content="Next-generation 3D Cadastral and Vertical Property Intelligence Platform for urban property governance, multi-storey ownership, and subsurface infrastructure mapping.">
-    <meta name="keywords" content="3D ULPIN, Bhu-Aadhaar, Cadastre 3D, Smart India Hackathon 2026, PS 229, Vertical Property Mapping, Underground Infrastructure">
-
+    <meta name="description"
+        content="Next-generation 3D Cadastral and Vertical Property Intelligence Platform for urban property governance, multi-storey ownership, and subsurface infrastructure mapping.">
+    <meta name="keywords"
+        content="3D ULPIN, Bhu-Aadhaar, Cadastre 3D, Smart India Hackathon 2026, PS 229, Vertical Property Mapping, Underground Infrastructure">
+    <!-- 3d ulpin -->
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -33,11 +38,11 @@
             --bg-card: rgba(15, 25, 48, 0.75);
             --bg-card-hover: rgba(23, 37, 70, 0.85);
             --bg-glass: rgba(10, 18, 36, 0.65);
-            
+
             --border-subtle: rgba(0, 240, 255, 0.12);
             --border-medium: rgba(0, 240, 255, 0.25);
             --border-glow: rgba(0, 240, 255, 0.5);
-            
+
             --accent-cyan: #00f0ff;
             --accent-blue: #3b82f6;
             --accent-indigo: #6366f1;
@@ -49,7 +54,7 @@
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
             --text-dim: #64748b;
-            
+
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-heading: 'Outfit', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
@@ -60,7 +65,7 @@
             --radius-md: 12px;
             --radius-lg: 18px;
             --radius-xl: 24px;
-            
+
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.35);
             --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
             --shadow-glow: 0 0 25px rgba(0, 240, 255, 0.2);
@@ -90,7 +95,8 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        html, body {
+        html,
+        body {
             width: 100%;
             height: 100%;
             font-family: var(--font-sans);
@@ -101,7 +107,7 @@
 
         body {
             display: flex;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.04) 0%, transparent 40%),
                 radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 45%),
                 linear-gradient(to bottom, #060b18, #070e22);
@@ -113,13 +119,16 @@
             width: 7px;
             height: 7px;
         }
+
         ::-webkit-scrollbar-track {
             background: rgba(6, 11, 24, 0.8);
         }
+
         ::-webkit-scrollbar-thumb {
             background: rgba(0, 240, 255, 0.25);
             border-radius: 10px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent-cyan);
         }
@@ -137,13 +146,20 @@
             transition: var(--transition);
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             font-family: inherit;
             outline: none;
         }
 
         /* Typography */
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: var(--font-heading);
             font-weight: 700;
             letter-spacing: -0.02em;
@@ -249,8 +265,17 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(1.3); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(1.3);
+            }
         }
 
         /* Buttons */
@@ -574,8 +599,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Section Headers */
@@ -842,7 +874,10 @@
         .slider {
             position: absolute;
             cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-color: rgba(255, 255, 255, 0.15);
             transition: .3s;
             border-radius: 20px;
@@ -860,11 +895,11 @@
             border-radius: 50%;
         }
 
-        input:checked + .slider {
+        input:checked+.slider {
             background-color: var(--accent-cyan);
         }
 
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(16px);
             background-color: #040915;
         }
@@ -925,8 +960,15 @@
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .inspector-row {
@@ -1059,7 +1101,8 @@
             justify-content: center;
         }
 
-        #qrcode canvas, #qrcode img {
+        #qrcode canvas,
+        #qrcode img {
             width: 100% !important;
             height: 100% !important;
         }
@@ -1129,7 +1172,8 @@
             transition: var(--transition);
         }
 
-        .filter-chip:hover, .filter-chip.active {
+        .filter-chip:hover,
+        .filter-chip.active {
             background: rgba(0, 240, 255, 0.15);
             border-color: var(--accent-cyan);
             color: var(--accent-cyan);
@@ -1258,7 +1302,8 @@
             transition: var(--transition);
         }
 
-        .unit-box:hover, .unit-box.active {
+        .unit-box:hover,
+        .unit-box.active {
             border-color: var(--accent-cyan);
             background: rgba(0, 240, 255, 0.12);
             transform: scale(1.03);
@@ -1462,7 +1507,10 @@
            ========================================================================== */
         .modal-backdrop {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: rgba(2, 6, 18, 0.85);
             backdrop-filter: blur(16px);
             z-index: 200;
@@ -1600,8 +1648,15 @@
         }
 
         @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         /* Mobile Responsiveness */
@@ -1612,21 +1667,29 @@
                 top: 0;
                 bottom: 0;
             }
+
             #app-sidebar.open {
                 left: 0;
             }
-            .dashboard-main-grid, .generator-grid, .charts-grid, .underground-grid {
+
+            .dashboard-main-grid,
+            .generator-grid,
+            .charts-grid,
+            .underground-grid {
                 grid-template-columns: 1fr;
             }
+
             .vertical-explorer-grid {
                 grid-template-columns: 1fr;
             }
+
             .ai-pipeline-grid {
                 grid-template-columns: 1fr 1fr;
             }
         }
     </style>
 </head>
+
 <body>
 
     <!-- ==========================================================================
@@ -1696,7 +1759,8 @@
 
         <div class="sidebar-footer">
             <div class="status-chip">
-                <span><i class="fa-solid fa-satellite-dish" style="color: var(--accent-cyan); margin-right: 6px;"></i> CORS RTK Node</span>
+                <span><i class="fa-solid fa-satellite-dish" style="color: var(--accent-cyan); margin-right: 6px;"></i>
+                    CORS RTK Node</span>
                 <span style="color: var(--accent-emerald); font-weight: 700;">±1.2 cm</span>
             </div>
         </div>
@@ -1760,7 +1824,8 @@
                         <span class="badge badge-cyan">v3.4 Production Ready</span>
                     </h2>
                     <p class="section-header-sub">
-                        Next-generation 3D cadastral framework for accurate urban property governance, resolving spatial ambiguity in multi-storey apartments, underground infrastructure, and air rights.
+                        Next-generation 3D cadastral framework for accurate urban property governance, resolving spatial
+                        ambiguity in multi-storey apartments, underground infrastructure, and air rights.
                     </p>
                 </div>
                 <div>
@@ -1845,8 +1910,10 @@
                     <canvas id="mini-3d-canvas"></canvas>
                     <div class="viewport-overlay-hud">
                         <div class="hud-badge-group">
-                            <span class="badge badge-cyan"><i class="fa-solid fa-globe"></i> Interactive 3D Digital Twin</span>
-                            <span class="badge" style="background: rgba(0,0,0,0.6); color: #fff;">Rotate: Left Click • Pan: Right Click • Zoom: Scroll</span>
+                            <span class="badge badge-cyan"><i class="fa-solid fa-globe"></i> Interactive 3D Digital
+                                Twin</span>
+                            <span class="badge" style="background: rgba(0,0,0,0.6); color: #fff;">Rotate: Left Click •
+                                Pan: Right Click • Zoom: Scroll</span>
                         </div>
                         <div class="viewport-actions">
                             <button class="btn btn-primary btn-sm" onclick="switchView('view-map')">
@@ -1858,28 +1925,34 @@
 
                 <div class="problem-solution-card">
                     <div>
-                        <span class="badge badge-amber"><i class="fa-solid fa-lightbulb"></i> PS 229 Core Breakthrough</span>
+                        <span class="badge badge-amber"><i class="fa-solid fa-lightbulb"></i> PS 229 Core
+                            Breakthrough</span>
                         <h3 style="font-size: 1.25rem; margin-top: 8px;">2D vs 3D Cadastral Paradigm</h3>
                     </div>
 
                     <div class="feature-bullet">
                         <i class="fa-solid fa-circle-xmark" style="color: var(--accent-rose);"></i>
                         <div>
-                            <strong style="color: #fff;">Traditional 2D Failure:</strong> Flattened polygon records cannot assign distinct legal ownership to multiple apartment owners stacked on the same ground footprint.
+                            <strong style="color: #fff;">Traditional 2D Failure:</strong> Flattened polygon records
+                            cannot assign distinct legal ownership to multiple apartment owners stacked on the same
+                            ground footprint.
                         </div>
                     </div>
 
                     <div class="feature-bullet">
                         <i class="fa-solid fa-circle-check" style="color: var(--accent-emerald);"></i>
                         <div>
-                            <strong style="color: #fff;">3D Volumetric ULPIN:</strong> Adds standardized Z-elevation bounds, floor index, and unit delimiters to the 14-digit Bhu-Aadhaar base standard.
+                            <strong style="color: #fff;">3D Volumetric ULPIN:</strong> Adds standardized Z-elevation
+                            bounds, floor index, and unit delimiters to the 14-digit Bhu-Aadhaar base standard.
                         </div>
                     </div>
 
                     <div class="feature-bullet">
                         <i class="fa-solid fa-layer-group" style="color: var(--accent-cyan);"></i>
                         <div>
-                            <strong style="color: #fff;">Subsurface Integration:</strong> Prevents uncoordinated excavation and property disputes by mapping deep utilities, metro tunnels, and basement easements.
+                            <strong style="color: #fff;">Subsurface Integration:</strong> Prevents uncoordinated
+                            excavation and property disputes by mapping deep utilities, metro tunnels, and basement
+                            easements.
                         </div>
                     </div>
 
@@ -1887,7 +1960,8 @@
                         <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="switchView('view-vertical')">
                             <i class="fa-solid fa-building"></i> Vertical Explorer
                         </button>
-                        <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="switchView('view-underground')">
+                        <button class="btn btn-secondary btn-sm" style="flex: 1;"
+                            onclick="switchView('view-underground')">
                             <i class="fa-solid fa-water"></i> Underground Map
                         </button>
                     </div>
@@ -1906,7 +1980,8 @@
                         <span>3D Cadastral & Urban WebGIS Engine</span>
                     </h2>
                     <p class="section-header-sub">
-                        High-precision volumetric spatial browser with real-time raycasting, floor slicing, and subterranean infrastructure telemetry.
+                        High-precision volumetric spatial browser with real-time raycasting, floor slicing, and
+                        subterranean infrastructure telemetry.
                     </p>
                 </div>
             </div>
@@ -1918,7 +1993,8 @@
                 <div class="map-floating-panel">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">
-                            <i class="fa-solid fa-sliders" style="color: var(--accent-cyan); margin-right: 6px;"></i> Layer Controls
+                            <i class="fa-solid fa-sliders" style="color: var(--accent-cyan); margin-right: 6px;"></i>
+                            Layer Controls
                         </span>
                         <span class="badge badge-cyan">Active</span>
                     </div>
@@ -1928,25 +2004,29 @@
                         <span class="layer-item-label">
                             <span class="color-pip" style="background: #3b82f6;"></span> Surface Parcels
                         </span>
-                        <label class="switch"><input type="checkbox" id="layer-parcels" checked onchange="toggleMapLayer('parcels')"><span class="slider"></span></label>
+                        <label class="switch"><input type="checkbox" id="layer-parcels" checked
+                                onchange="toggleMapLayer('parcels')"><span class="slider"></span></label>
                     </div>
                     <div class="layer-item">
                         <span class="layer-item-label">
                             <span class="color-pip" style="background: #00f0ff;"></span> 3D Buildings
                         </span>
-                        <label class="switch"><input type="checkbox" id="layer-buildings" checked onchange="toggleMapLayer('buildings')"><span class="slider"></span></label>
+                        <label class="switch"><input type="checkbox" id="layer-buildings" checked
+                                onchange="toggleMapLayer('buildings')"><span class="slider"></span></label>
                     </div>
                     <div class="layer-item">
                         <span class="layer-item-label">
                             <span class="color-pip" style="background: #10b981;"></span> Floor Slices
                         </span>
-                        <label class="switch"><input type="checkbox" id="layer-floors" checked onchange="toggleMapLayer('floors')"><span class="slider"></span></label>
+                        <label class="switch"><input type="checkbox" id="layer-floors" checked
+                                onchange="toggleMapLayer('floors')"><span class="slider"></span></label>
                     </div>
                     <div class="layer-item">
                         <span class="layer-item-label">
                             <span class="color-pip" style="background: #64748b;"></span> Roadways & Footprints
                         </span>
-                        <label class="switch"><input type="checkbox" id="layer-roads" checked onchange="toggleMapLayer('roads')"><span class="slider"></span></label>
+                        <label class="switch"><input type="checkbox" id="layer-roads" checked
+                                onchange="toggleMapLayer('roads')"><span class="slider"></span></label>
                     </div>
 
                     <div class="layer-category-title">Underground Utilities</div>
@@ -1954,25 +2034,29 @@
                         <span class="layer-item-label">
                             <span class="color-pip" style="background: #0284c7;"></span> Water Pipeline
                         </span>
-                        <label class="switch"><input type="checkbox" id="layer-water" checked onchange="toggleMapLayer('water')"><span class="slider"></span></label>
+                        <label class="switch"><input type="checkbox" id="layer-water" checked
+                                onchange="toggleMapLayer('water')"><span class="slider"></span></label>
                     </div>
                     <div class="layer-item">
                         <span class="layer-item-label">
                             <span class="color-pip" style="background: #a855f7;"></span> Sewer Network
                         </span>
-                        <label class="switch"><input type="checkbox" id="layer-sewer" checked onchange="toggleMapLayer('sewer')"><span class="slider"></span></label>
+                        <label class="switch"><input type="checkbox" id="layer-sewer" checked
+                                onchange="toggleMapLayer('sewer')"><span class="slider"></span></label>
                     </div>
                     <div class="layer-item">
                         <span class="layer-item-label">
                             <span class="color-pip" style="background: #ef4444;"></span> Electricity Grid
                         </span>
-                        <label class="switch"><input type="checkbox" id="layer-electricity" checked onchange="toggleMapLayer('electricity')"><span class="slider"></span></label>
+                        <label class="switch"><input type="checkbox" id="layer-electricity" checked
+                                onchange="toggleMapLayer('electricity')"><span class="slider"></span></label>
                     </div>
                     <div class="layer-item">
                         <span class="layer-item-label">
                             <span class="color-pip" style="background: #f59e0b;"></span> Telecom / Fiber
                         </span>
-                        <label class="switch"><input type="checkbox" id="layer-telecom" checked onchange="toggleMapLayer('telecom')"><span class="slider"></span></label>
+                        <label class="switch"><input type="checkbox" id="layer-telecom" checked
+                                onchange="toggleMapLayer('telecom')"><span class="slider"></span></label>
                     </div>
                 </div>
 
@@ -1994,14 +2078,17 @@
 
                 <!-- Floating Building Inspector Panel -->
                 <div id="building-inspector-panel">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                         <span class="badge badge-cyan" id="insp-type">3D Building</span>
                         <button class="icon-btn" onclick="closeInspector()" style="width: 28px; height: 28px;">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
                     <h3 id="insp-name" style="font-size: 1.15rem; margin-bottom: 4px;">BLD-DBH-024</h3>
-                    <div class="mono" id="insp-ulpin" style="color: var(--accent-cyan); font-size: 0.82rem; margin-bottom: 14px;">BR-DBH-W12-B024-F03-U031</div>
+                    <div class="mono" id="insp-ulpin"
+                        style="color: var(--accent-cyan); font-size: 0.82rem; margin-bottom: 14px;">
+                        BR-DBH-W12-B024-F03-U031</div>
 
                     <div class="inspector-row">
                         <span class="inspector-label">Total Floors:</span>
@@ -2021,7 +2108,8 @@
                     </div>
                     <div class="inspector-row">
                         <span class="inspector-label">Validation Status:</span>
-                        <span class="inspector-val" style="color: var(--accent-emerald);"><i class="fa-solid fa-circle-check"></i> Verified Cadastre</span>
+                        <span class="inspector-val" style="color: var(--accent-emerald);"><i
+                                class="fa-solid fa-circle-check"></i> Verified Cadastre</span>
                     </div>
 
                     <div style="display: flex; gap: 10px; margin-top: 18px;">
@@ -2036,12 +2124,18 @@
 
                 <!-- Floating Legend -->
                 <div class="map-legend">
-                    <div class="legend-item"><span class="color-pip" style="background: #3b82f6;"></span> Surface Parcel</div>
-                    <div class="legend-item"><span class="color-pip" style="background: #00f0ff;"></span> 3D Building</div>
-                    <div class="legend-item"><span class="color-pip" style="background: #10b981;"></span> Selected Unit</div>
-                    <div class="legend-item"><span class="color-pip" style="background: #0284c7;"></span> Water Main</div>
-                    <div class="legend-item"><span class="color-pip" style="background: #ef4444;"></span> Electricity</div>
-                    <div class="legend-item"><span class="color-pip" style="background: #f43f5e;"></span> Conflict Zone</div>
+                    <div class="legend-item"><span class="color-pip" style="background: #3b82f6;"></span> Surface Parcel
+                    </div>
+                    <div class="legend-item"><span class="color-pip" style="background: #00f0ff;"></span> 3D Building
+                    </div>
+                    <div class="legend-item"><span class="color-pip" style="background: #10b981;"></span> Selected Unit
+                    </div>
+                    <div class="legend-item"><span class="color-pip" style="background: #0284c7;"></span> Water Main
+                    </div>
+                    <div class="legend-item"><span class="color-pip" style="background: #ef4444;"></span> Electricity
+                    </div>
+                    <div class="legend-item"><span class="color-pip" style="background: #f43f5e;"></span> Conflict Zone
+                    </div>
                 </div>
             </div>
         </section>
@@ -2057,11 +2151,13 @@
                         <span>3D ULPIN Standard Generator</span>
                     </h2>
                     <p class="section-header-sub">
-                        Generate standardized 3D Bhu-Aadhaar identifiers encoding volumetric spatial coordinates, floor elevation offsets, and multi-unit vertical topology.
+                        Generate standardized 3D Bhu-Aadhaar identifiers encoding volumetric spatial coordinates, floor
+                        elevation offsets, and multi-unit vertical topology.
                     </p>
                 </div>
                 <div>
-                    <span class="badge badge-cyan"><i class="fa-solid fa-barcode"></i> Formula: [State]-[Dist]-[Ward]-[Parcel]-[Bld]-[Floor]-[Unit]</span>
+                    <span class="badge badge-cyan"><i class="fa-solid fa-barcode"></i> Formula:
+                        [State]-[Dist]-[Ward]-[Parcel]-[Bld]-[Floor]-[Unit]</span>
                 </div>
             </div>
 
@@ -2069,7 +2165,8 @@
                 <!-- Form -->
                 <div class="glass-panel" style="padding: 28px;">
                     <h3 style="font-size: 1.15rem; margin-bottom: 20px; color: #fff;">
-                        <i class="fa-solid fa-pen-to-square" style="color: var(--accent-cyan); margin-right: 8px;"></i> Parcel & Property Parameters
+                        <i class="fa-solid fa-pen-to-square" style="color: var(--accent-cyan); margin-right: 8px;"></i>
+                        Parcel & Property Parameters
                     </h3>
 
                     <form id="ulpin-form" class="form-grid" onsubmit="handleGenerateULPIN(event)">
@@ -2086,27 +2183,32 @@
 
                         <div class="form-group">
                             <label class="form-label">District</label>
-                            <input type="text" id="inp-district" class="form-control" value="DBH" placeholder="e.g., DBH, MUM, BLR" oninput="autoUpdateULPIN()">
+                            <input type="text" id="inp-district" class="form-control" value="DBH"
+                                placeholder="e.g., DBH, MUM, BLR" oninput="autoUpdateULPIN()">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">City / Ward</label>
-                            <input type="text" id="inp-ward" class="form-control" value="W12" placeholder="e.g., W12, Z04" oninput="autoUpdateULPIN()">
+                            <input type="text" id="inp-ward" class="form-control" value="W12"
+                                placeholder="e.g., W12, Z04" oninput="autoUpdateULPIN()">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Village / Mouza</label>
-                            <input type="text" id="inp-mouza" class="form-control" value="Lalbagh" placeholder="Mouza name">
+                            <input type="text" id="inp-mouza" class="form-control" value="Lalbagh"
+                                placeholder="Mouza name">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Parcel ID (2D Base)</label>
-                            <input type="text" id="inp-parcel" class="form-control" value="P408" placeholder="e.g., P408" oninput="autoUpdateULPIN()">
+                            <input type="text" id="inp-parcel" class="form-control" value="P408"
+                                placeholder="e.g., P408" oninput="autoUpdateULPIN()">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Building ID</label>
-                            <input type="text" id="inp-bld" class="form-control" value="B024" placeholder="e.g., B024" oninput="autoUpdateULPIN()">
+                            <input type="text" id="inp-bld" class="form-control" value="B024" placeholder="e.g., B024"
+                                oninput="autoUpdateULPIN()">
                         </div>
 
                         <div class="form-group">
@@ -2129,22 +2231,26 @@
 
                         <div class="form-group">
                             <label class="form-label">Unit / Flat Number</label>
-                            <input type="text" id="inp-unit" class="form-control" value="U031" placeholder="e.g., U031, PK04" oninput="autoUpdateULPIN()">
+                            <input type="text" id="inp-unit" class="form-control" value="U031"
+                                placeholder="e.g., U031, PK04" oninput="autoUpdateULPIN()">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Latitude (°N)</label>
-                            <input type="text" id="inp-lat" class="form-control mono" value="26.15428" placeholder="26.15428">
+                            <input type="text" id="inp-lat" class="form-control mono" value="26.15428"
+                                placeholder="26.15428">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Longitude (°E)</label>
-                            <input type="text" id="inp-lng" class="form-control mono" value="85.89721" placeholder="85.89721">
+                            <input type="text" id="inp-lng" class="form-control mono" value="85.89721"
+                                placeholder="85.89721">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Elevation (Z Offset in meters)</label>
-                            <input type="text" id="inp-elevation" class="form-control mono" value="+12.5m" placeholder="+12.5m">
+                            <input type="text" id="inp-elevation" class="form-control mono" value="+12.5m"
+                                placeholder="+12.5m">
                         </div>
 
                         <div class="form-group">
@@ -2170,9 +2276,11 @@
 
                 <!-- Preview Display -->
                 <div class="ulpin-preview-box">
-                    <span class="badge badge-emerald"><i class="fa-solid fa-circle-check"></i> Standard Compliant (ISO/TC 211 & LADM 3D)</span>
+                    <span class="badge badge-emerald"><i class="fa-solid fa-circle-check"></i> Standard Compliant
+                        (ISO/TC 211 & LADM 3D)</span>
                     <h3 style="margin-top: 14px; font-size: 1.3rem;">3D ULPIN Output</h3>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Unique Volumetric Cadastral Property Identifier</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Unique Volumetric Cadastral
+                        Property Identifier</p>
 
                     <div class="ulpin-code-display mono" id="display-generated-ulpin">
                         BR-DBH-W12-B024-F03-U031
@@ -2181,20 +2289,24 @@
                     <!-- Dynamic QR Canvas -->
                     <div class="qr-placeholder" id="qrcode"></div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; max-width: 380px;">
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; max-width: 380px;">
                         <button class="btn btn-secondary btn-sm" onclick="copyULPIN()">
                             <i class="fa-solid fa-copy"></i> Copy ULPIN
                         </button>
                         <button class="btn btn-secondary btn-sm" onclick="switchView('view-map')">
                             <i class="fa-solid fa-map-location-dot"></i> View in 3D Map
                         </button>
-                        <button class="btn btn-emerald btn-sm" style="grid-column: 1 / -1;" onclick="openCertificateModal()">
+                        <button class="btn btn-emerald btn-sm" style="grid-column: 1 / -1;"
+                            onclick="openCertificateModal()">
                             <i class="fa-solid fa-file-contract"></i> View Digital Property Certificate
                         </button>
                     </div>
 
-                    <div style="margin-top: 20px; font-size: 0.72rem; color: var(--text-dim); text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 12px;">
-                        <i class="fa-solid fa-shield-halved"></i> Prototype / Demonstration ULPIN generated for Smart India Hackathon 2026.
+                    <div
+                        style="margin-top: 20px; font-size: 0.72rem; color: var(--text-dim); text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 12px;">
+                        <i class="fa-solid fa-shield-halved"></i> Prototype / Demonstration ULPIN generated for Smart
+                        India Hackathon 2026.
                     </div>
                 </div>
             </div>
@@ -2211,7 +2323,8 @@
                         <span>Smart Multi-Parameter Property Search</span>
                     </h2>
                     <p class="section-header-sub">
-                        Lookup surface parcels, high-rise apartment units, commercial suites, and subterranean rights across the unified 3D registry.
+                        Lookup surface parcels, high-rise apartment units, commercial suites, and subterranean rights
+                        across the unified 3D registry.
                     </p>
                 </div>
             </div>
@@ -2220,7 +2333,9 @@
                 <div class="search-bar-container">
                     <div class="search-input-wrap">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="prop-search-query" class="search-input" placeholder="Search by ULPIN, Parcel ID, Building Name, Flat Number, or Lat/Lng..." oninput="handlePropertySearch()">
+                        <input type="text" id="prop-search-query" class="search-input"
+                            placeholder="Search by ULPIN, Parcel ID, Building Name, Flat Number, or Lat/Lng..."
+                            oninput="handlePropertySearch()">
                     </div>
                     <button class="btn btn-primary" onclick="handlePropertySearch()">
                         <i class="fa-solid fa-filter"></i> Search Registry
@@ -2228,7 +2343,9 @@
                 </div>
 
                 <div class="quick-chips">
-                    <span style="font-size: 0.75rem; color: var(--text-dim); align-self: center; margin-right: 4px;">Quick Filters:</span>
+                    <span
+                        style="font-size: 0.75rem; color: var(--text-dim); align-self: center; margin-right: 4px;">Quick
+                        Filters:</span>
                     <span class="filter-chip active" onclick="filterChipSearch('ALL')">All Records</span>
                     <span class="filter-chip" onclick="filterChipSearch('Apartment')">Apartments</span>
                     <span class="filter-chip" onclick="filterChipSearch('Commercial')">Commercial</span>
@@ -2254,7 +2371,8 @@
                         <span>Vertical Property Explorer</span>
                     </h2>
                     <p class="section-header-sub">
-                        Interactive volumetric skyscraper decomposition. Inspect individual floor levels, subdivided units, air rights, and vertical utility shafts.
+                        Interactive volumetric skyscraper decomposition. Inspect individual floor levels, subdivided
+                        units, air rights, and vertical utility shafts.
                     </p>
                 </div>
                 <div>
@@ -2265,43 +2383,56 @@
             <div class="vertical-explorer-grid">
                 <!-- Left: Floor Elevator Column -->
                 <div class="floor-stack" id="floor-elevator-list">
-                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">
+                    <div
+                        style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">
                         <i class="fa-solid fa-stairs" style="color: var(--accent-cyan);"></i> Select Floor Level
                     </div>
-                    <button class="floor-btn roof" onclick="selectFloorLevel('RF', 'Roof Top Terrace & Solar Array', 28.0, 'Air Rights / Common Space')">
+                    <button class="floor-btn roof"
+                        onclick="selectFloorLevel('RF', 'Roof Top Terrace & Solar Array', 28.0, 'Air Rights / Common Space')">
                         <span>Roof Level</span><span class="mono">+28.0m</span>
                     </button>
-                    <button class="floor-btn" onclick="selectFloorLevel('F08', 'Penthouse Suites (P01-P04)', 24.5, 'Luxury Residential')">
+                    <button class="floor-btn"
+                        onclick="selectFloorLevel('F08', 'Penthouse Suites (P01-P04)', 24.5, 'Luxury Residential')">
                         <span>Floor 08</span><span class="mono">+24.5m</span>
                     </button>
-                    <button class="floor-btn" onclick="selectFloorLevel('F07', 'Residential Units (U71-U74)', 21.0, 'Residential')">
+                    <button class="floor-btn"
+                        onclick="selectFloorLevel('F07', 'Residential Units (U71-U74)', 21.0, 'Residential')">
                         <span>Floor 07</span><span class="mono">+21.0m</span>
                     </button>
-                    <button class="floor-btn" onclick="selectFloorLevel('F06', 'Residential Units (U61-U64)', 17.5, 'Residential')">
+                    <button class="floor-btn"
+                        onclick="selectFloorLevel('F06', 'Residential Units (U61-U64)', 17.5, 'Residential')">
                         <span>Floor 06</span><span class="mono">+17.5m</span>
                     </button>
-                    <button class="floor-btn" onclick="selectFloorLevel('F05', 'Residential Units (U51-U54)', 14.0, 'Residential')">
+                    <button class="floor-btn"
+                        onclick="selectFloorLevel('F05', 'Residential Units (U51-U54)', 14.0, 'Residential')">
                         <span>Floor 05</span><span class="mono">+14.0m</span>
                     </button>
-                    <button class="floor-btn" onclick="selectFloorLevel('F04', 'Residential Units (U41-U44)', 10.5, 'Residential')">
+                    <button class="floor-btn"
+                        onclick="selectFloorLevel('F04', 'Residential Units (U41-U44)', 10.5, 'Residential')">
                         <span>Floor 04</span><span class="mono">+10.5m</span>
                     </button>
-                    <button class="floor-btn active" onclick="selectFloorLevel('F03', 'Residential Units (U31-U34)', 7.0, 'Residential')">
+                    <button class="floor-btn active"
+                        onclick="selectFloorLevel('F03', 'Residential Units (U31-U34)', 7.0, 'Residential')">
                         <span>Floor 03</span><span class="mono">+7.0m</span>
                     </button>
-                    <button class="floor-btn" onclick="selectFloorLevel('F02', 'Commercial Suites (C21-C24)', 3.5, 'Commercial Office')">
+                    <button class="floor-btn"
+                        onclick="selectFloorLevel('F02', 'Commercial Suites (C21-C24)', 3.5, 'Commercial Office')">
                         <span>Floor 02</span><span class="mono">+3.5m</span>
                     </button>
-                    <button class="floor-btn" onclick="selectFloorLevel('F01', 'Retail Spaces (R11-R14)', 0.0, 'Retail / Banking')">
+                    <button class="floor-btn"
+                        onclick="selectFloorLevel('F01', 'Retail Spaces (R11-R14)', 0.0, 'Retail / Banking')">
                         <span>Floor 01</span><span class="mono">+0.0m</span>
                     </button>
-                    <button class="floor-btn" onclick="selectFloorLevel('G00', 'Lobby & Security Hub', 0.0, 'Common Amenity')">
+                    <button class="floor-btn"
+                        onclick="selectFloorLevel('G00', 'Lobby & Security Hub', 0.0, 'Common Amenity')">
                         <span>Ground Floor</span><span class="mono">0.0m</span>
                     </button>
-                    <button class="floor-btn basement" onclick="selectFloorLevel('B01', 'Basement Parking (P01-P18)', -3.5, 'Dedicated Parking')">
+                    <button class="floor-btn basement"
+                        onclick="selectFloorLevel('B01', 'Basement Parking (P01-P18)', -3.5, 'Dedicated Parking')">
                         <span>Basement B1</span><span class="mono">-3.5m</span>
                     </button>
-                    <button class="floor-btn basement" onclick="selectFloorLevel('B02', 'Utility & HVAC Substation', -7.0, 'Subsurface Utility')">
+                    <button class="floor-btn basement"
+                        onclick="selectFloorLevel('B02', 'Utility & HVAC Substation', -7.0, 'Subsurface Utility')">
                         <span>Basement B2</span><span class="mono">-7.0m</span>
                     </button>
                 </div>
@@ -2311,51 +2442,69 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <h3 id="stage-floor-title" style="font-size: 1.3rem;">Floor 03 Level Overview</h3>
-                            <p id="stage-floor-sub" style="font-size: 0.82rem; color: var(--text-muted);">Elevation: +7.0m AMSL • 4 Volumetric Units Configured</p>
+                            <p id="stage-floor-sub" style="font-size: 0.82rem; color: var(--text-muted);">Elevation:
+                                +7.0m AMSL • 4 Volumetric Units Configured</p>
                         </div>
                         <span class="badge badge-emerald" id="stage-floor-badge">Occupancy: 100%</span>
                     </div>
 
                     <!-- 3D Voxel Graphic Representation -->
                     <div class="volumetric-diagram-box">
-                        <svg viewBox="0 0 500 220" style="width: 100%; max-height: 220px; filter: drop-shadow(0 0 20px rgba(0,240,255,0.25));">
+                        <svg viewBox="0 0 500 220"
+                            style="width: 100%; max-height: 220px; filter: drop-shadow(0 0 20px rgba(0,240,255,0.25));">
                             <!-- 3D Isometric Building Slab Graphic -->
-                            <polygon points="250,20 450,90 250,160 50,90" fill="rgba(0, 240, 255, 0.15)" stroke="#00f0ff" stroke-width="2"/>
-                            <polygon points="50,90 250,160 250,200 50,130" fill="rgba(16, 28, 56, 0.85)" stroke="#00f0ff" stroke-width="2"/>
-                            <polygon points="450,90 250,160 250,200 450,130" fill="rgba(9, 16, 36, 0.95)" stroke="#00f0ff" stroke-width="2"/>
-                            
+                            <polygon points="250,20 450,90 250,160 50,90" fill="rgba(0, 240, 255, 0.15)"
+                                stroke="#00f0ff" stroke-width="2" />
+                            <polygon points="50,90 250,160 250,200 50,130" fill="rgba(16, 28, 56, 0.85)"
+                                stroke="#00f0ff" stroke-width="2" />
+                            <polygon points="450,90 250,160 250,200 450,130" fill="rgba(9, 16, 36, 0.95)"
+                                stroke="#00f0ff" stroke-width="2" />
+
                             <!-- Subdivided Unit Boxes on Top Face -->
-                            <polygon points="250,25 345,60 250,95 155,60" fill="rgba(16, 185, 129, 0.35)" stroke="#10b981" stroke-width="1.5"/>
-                            <text x="250" y="65" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit U031</text>
+                            <polygon points="250,25 345,60 250,95 155,60" fill="rgba(16, 185, 129, 0.35)"
+                                stroke="#10b981" stroke-width="1.5" />
+                            <text x="250" y="65" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit
+                                U031</text>
 
-                            <polygon points="350,62 445,95 350,130 255,97" fill="rgba(59, 130, 246, 0.3)" stroke="#3b82f6" stroke-width="1.5"/>
-                            <text x="350" y="100" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit U032</text>
+                            <polygon points="350,62 445,95 350,130 255,97" fill="rgba(59, 130, 246, 0.3)"
+                                stroke="#3b82f6" stroke-width="1.5" />
+                            <text x="350" y="100" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit
+                                U032</text>
 
-                            <polygon points="150,62 245,95 150,130 55,97" fill="rgba(168, 85, 247, 0.3)" stroke="#a855f7" stroke-width="1.5"/>
-                            <text x="150" y="100" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit U033</text>
+                            <polygon points="150,62 245,95 150,130 55,97" fill="rgba(168, 85, 247, 0.3)"
+                                stroke="#a855f7" stroke-width="1.5" />
+                            <text x="150" y="100" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit
+                                U033</text>
 
-                            <polygon points="250,100 345,133 250,155 155,133" fill="rgba(245, 158, 11, 0.3)" stroke="#f59e0b" stroke-width="1.5"/>
-                            <text x="250" y="135" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit U034</text>
+                            <polygon points="250,100 345,133 250,155 155,133" fill="rgba(245, 158, 11, 0.3)"
+                                stroke="#f59e0b" stroke-width="1.5" />
+                            <text x="250" y="135" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit
+                                U034</text>
                         </svg>
                     </div>
 
-                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                    <div
+                        style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
                         Click a unit to inspect volumetric property rights:
                     </div>
                     <div class="units-layout-grid" id="floor-units-list">
-                        <div class="unit-box active" onclick="selectUnitDetails('U031', '1,250 sq.ft.', 'BR-DBH-W12-B024-F03-U031', 'Rajesh Sharma', '+7.0m to +10.5m')">
+                        <div class="unit-box active"
+                            onclick="selectUnitDetails('U031', '1,250 sq.ft.', 'BR-DBH-W12-B024-F03-U031', 'Rajesh Sharma', '+7.0m to +10.5m')">
                             <strong style="color: var(--accent-cyan); font-size: 0.9rem;">U-031</strong>
                             <div style="font-size: 0.72rem; color: var(--text-muted);">2BHK • 1,250 sq.ft.</div>
                         </div>
-                        <div class="unit-box" onclick="selectUnitDetails('U032', '1,420 sq.ft.', 'BR-DBH-W12-B024-F03-U032', 'Priya Verma', '+7.0m to +10.5m')">
+                        <div class="unit-box"
+                            onclick="selectUnitDetails('U032', '1,420 sq.ft.', 'BR-DBH-W12-B024-F03-U032', 'Priya Verma', '+7.0m to +10.5m')">
                             <strong style="color: var(--accent-blue); font-size: 0.9rem;">U-032</strong>
                             <div style="font-size: 0.72rem; color: var(--text-muted);">3BHK • 1,420 sq.ft.</div>
                         </div>
-                        <div class="unit-box" onclick="selectUnitDetails('U033', '1,180 sq.ft.', 'BR-DBH-W12-B024-F03-U033', 'Amitabh Roy', '+7.0m to +10.5m')">
+                        <div class="unit-box"
+                            onclick="selectUnitDetails('U033', '1,180 sq.ft.', 'BR-DBH-W12-B024-F03-U033', 'Amitabh Roy', '+7.0m to +10.5m')">
                             <strong style="color: var(--accent-purple); font-size: 0.9rem;">U-033</strong>
                             <div style="font-size: 0.72rem; color: var(--text-muted);">2BHK • 1,180 sq.ft.</div>
                         </div>
-                        <div class="unit-box" onclick="selectUnitDetails('U034', '1,650 sq.ft.', 'BR-DBH-W12-B024-F03-U034', 'Sunita Devi', '+7.0m to +10.5m')">
+                        <div class="unit-box"
+                            onclick="selectUnitDetails('U034', '1,650 sq.ft.', 'BR-DBH-W12-B024-F03-U034', 'Sunita Devi', '+7.0m to +10.5m')">
                             <strong style="color: var(--accent-amber); font-size: 0.9rem;">U-034</strong>
                             <div style="font-size: 0.72rem; color: var(--text-muted);">3BHK • 1,650 sq.ft.</div>
                         </div>
@@ -2363,11 +2512,14 @@
                 </div>
 
                 <!-- Right: Selected Unit Inspector Card -->
-                <div class="glass-panel" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="glass-panel"
+                    style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
                         <span class="badge badge-cyan" id="unit-badge">Volumetric Unit</span>
                         <h3 id="unit-name" style="font-size: 1.3rem; margin: 8px 0 2px;">Unit U-031</h3>
-                        <div class="mono" id="unit-ulpin" style="color: var(--accent-cyan); font-size: 0.8rem; margin-bottom: 16px;">BR-DBH-W12-B024-F03-U031</div>
+                        <div class="mono" id="unit-ulpin"
+                            style="color: var(--accent-cyan); font-size: 0.8rem; margin-bottom: 16px;">
+                            BR-DBH-W12-B024-F03-U031</div>
 
                         <div class="inspector-row">
                             <span class="inspector-label">Owner of Record:</span>
@@ -2387,7 +2539,8 @@
                         </div>
                         <div class="inspector-row">
                             <span class="inspector-label">Connected Utilities:</span>
-                            <span class="inspector-val" style="color: var(--accent-emerald);"><i class="fa-solid fa-bolt"></i> Power • <i class="fa-solid fa-water"></i> Water</span>
+                            <span class="inspector-val" style="color: var(--accent-emerald);"><i
+                                    class="fa-solid fa-bolt"></i> Power • <i class="fa-solid fa-water"></i> Water</span>
                         </div>
                     </div>
 
@@ -2395,7 +2548,8 @@
                         <button class="btn btn-primary btn-sm" onclick="openCertificateModalFromCurrent()">
                             <i class="fa-solid fa-certificate"></i> Generate 3D Certificate
                         </button>
-                        <button class="btn btn-secondary btn-sm" onclick="copyText(document.getElementById('unit-ulpin').innerText, 'ULPIN copied!')">
+                        <button class="btn btn-secondary btn-sm"
+                            onclick="copyText(document.getElementById('unit-ulpin').innerText, 'ULPIN copied!')">
                             <i class="fa-solid fa-copy"></i> Copy 3D ULPIN
                         </button>
                     </div>
@@ -2414,7 +2568,8 @@
                         <span>Underground Infrastructure & Subsurface Utility GIS</span>
                     </h2>
                     <p class="section-header-sub">
-                        3D Subsurface mapping of potable water mains, sewer trunks, power conduits, gas distribution, and metro corridors to prevent encroachment and utility clashes.
+                        3D Subsurface mapping of potable water mains, sewer trunks, power conduits, gas distribution,
+                        and metro corridors to prevent encroachment and utility clashes.
                     </p>
                 </div>
             </div>
@@ -2440,35 +2595,43 @@
                 <!-- Conflict Alert Panel -->
                 <div class="glass-panel" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
                     <div>
-                        <span class="badge badge-rose"><i class="fa-solid fa-triangle-exclamation"></i> Spatial Clash Detected</span>
+                        <span class="badge badge-rose"><i class="fa-solid fa-triangle-exclamation"></i> Spatial Clash
+                            Detected</span>
                         <h3 style="font-size: 1.15rem; margin-top: 8px;">Subsurface Utility Conflict #SC-04</h3>
                     </div>
 
                     <div class="glass-card" style="border-left: 4px solid var(--accent-rose);">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);">
                             <span>Utility Line:</span>
                             <strong style="color: #fff;">Water Pipeline WP-1024</strong>
                         </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
                             <span>Depth Level:</span>
                             <strong class="mono" style="color: var(--accent-cyan);">-4.2 meters</strong>
                         </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
                             <span>Affected Parcel:</span>
                             <strong class="mono" style="color: #fff;">BR-DBH-W12-B024</strong>
                         </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
                             <span>Risk Rating:</span>
                             <span class="badge badge-rose">HIGH SEVERITY</span>
                         </div>
                     </div>
 
                     <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
-                        <strong style="color: #fff;">Issue Description:</strong> Deep foundation pilings for Building B024 intersect within 0.8m buffer zone of municipal 600mm water main. Automated excavation clearance denied.
+                        <strong style="color: #fff;">Issue Description:</strong> Deep foundation pilings for Building
+                        B024 intersect within 0.8m buffer zone of municipal 600mm water main. Automated excavation
+                        clearance denied.
                     </p>
 
                     <div style="margin-top: auto; display: flex; gap: 10px;">
-                        <button class="btn btn-emerald btn-sm" style="flex: 1;" onclick="showToast('Notified Municipal Water Corporation and Survey Team')">
+                        <button class="btn btn-emerald btn-sm" style="flex: 1;"
+                            onclick="showToast('Notified Municipal Water Corporation and Survey Team')">
                             <i class="fa-solid fa-envelope"></i> Notify Utility Dept
                         </button>
                         <button class="btn btn-secondary btn-sm" onclick="switchView('view-conflicts')">
@@ -2490,7 +2653,8 @@
                         <span>AI / ML Cadastral Extraction & Validation Engine</span>
                     </h2>
                     <p class="section-header-sub">
-                        Deep learning models for automated building footprint extraction, volumetric floor segmentation from point clouds, and air rights topology validation.
+                        Deep learning models for automated building footprint extraction, volumetric floor segmentation
+                        from point clouds, and air rights topology validation.
                     </p>
                 </div>
                 <div>
@@ -2509,7 +2673,9 @@
                         <p style="font-size: 0.78rem; color: var(--text-muted);">Mask R-CNN on 5cm UAV Orthomosaics</p>
                     </div>
                     <div>
-                        <div class="progress-track"><div class="progress-bar-fill" id="ai-prog-1"></div></div>
+                        <div class="progress-track">
+                            <div class="progress-bar-fill" id="ai-prog-1"></div>
+                        </div>
                         <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
                             <span>Confidence Score</span>
                             <strong class="mono" id="ai-score-1">98.4%</strong>
@@ -2524,7 +2690,9 @@
                         <p style="font-size: 0.78rem; color: var(--text-muted);">PointNet++ on LiDAR 3D Point Cloud</p>
                     </div>
                     <div>
-                        <div class="progress-track"><div class="progress-bar-fill" id="ai-prog-2"></div></div>
+                        <div class="progress-track">
+                            <div class="progress-bar-fill" id="ai-prog-2"></div>
+                        </div>
                         <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
                             <span>Confidence Score</span>
                             <strong class="mono" id="ai-score-2">94.7%</strong>
@@ -2539,7 +2707,9 @@
                         <p style="font-size: 0.78rem; color: var(--text-muted);">BIM/IFC floor plan vectorization</p>
                     </div>
                     <div>
-                        <div class="progress-track"><div class="progress-bar-fill" id="ai-prog-3"></div></div>
+                        <div class="progress-track">
+                            <div class="progress-bar-fill" id="ai-prog-3"></div>
+                        </div>
                         <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
                             <span>Confidence Score</span>
                             <strong class="mono" id="ai-score-3">96.2%</strong>
@@ -2551,10 +2721,13 @@
                     <div>
                         <span class="badge badge-purple">Module 4</span>
                         <h3 style="font-size: 1.05rem; margin: 8px 0;">Topology & Air-Rights Check</h3>
-                        <p style="font-size: 0.78rem; color: var(--text-muted);">Graph Neural Network (GNN) validator</p>
+                        <p style="font-size: 0.78rem; color: var(--text-muted);">Graph Neural Network (GNN) validator
+                        </p>
                     </div>
                     <div>
-                        <div class="progress-track"><div class="progress-bar-fill" id="ai-prog-4"></div></div>
+                        <div class="progress-track">
+                            <div class="progress-bar-fill" id="ai-prog-4"></div>
+                        </div>
                         <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
                             <span>Confidence Score</span>
                             <strong class="mono" id="ai-score-4">97.1%</strong>
@@ -2567,7 +2740,8 @@
             <div class="glass-panel" style="padding: 20px;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                     <span style="font-size: 0.85rem; font-weight: 700; color: #fff;">
-                        <i class="fa-solid fa-terminal" style="color: var(--accent-cyan); margin-right: 8px;"></i> Live Neural Inference Telemetry
+                        <i class="fa-solid fa-terminal" style="color: var(--accent-cyan); margin-right: 8px;"></i> Live
+                        Neural Inference Telemetry
                     </span>
                     <span class="badge badge-emerald"><span class="pulse-dot"></span> CUDA Accelerated</span>
                 </div>
@@ -2590,49 +2764,62 @@
                         <span>Multi-Source 3D Cadastral Ingestion Architecture</span>
                     </h2>
                     <p class="section-header-sub">
-                        End-to-end data pipeline harmonizing airborne LiDAR, UAV photogrammetry, CORS GNSS ground control, and Municipal BIM models into the standard 3D ULPIN registry.
+                        End-to-end data pipeline harmonizing airborne LiDAR, UAV photogrammetry, CORS GNSS ground
+                        control, and Municipal BIM models into the standard 3D ULPIN registry.
                     </p>
                 </div>
             </div>
 
             <div class="pipeline-flow-container">
-                <div class="pipeline-node" onclick="showPipelineModal('Drone Photogrammetry', '5cm GSD high-resolution UAV imagery for surface orthomosaics and texture generation.')">
-                    <i class="fa-solid fa-drone" style="font-size: 1.8rem; color: var(--accent-cyan); margin-bottom: 10px;"></i>
+                <div class="pipeline-node"
+                    onclick="showPipelineModal('Drone Photogrammetry', '5cm GSD high-resolution UAV imagery for surface orthomosaics and texture generation.')">
+                    <i class="fa-solid fa-drone"
+                        style="font-size: 1.8rem; color: var(--accent-cyan); margin-bottom: 10px;"></i>
                     <h4 style="font-size: 0.88rem;">Drone Imagery</h4>
                     <span style="font-size: 0.7rem; color: var(--text-muted);">GeoTIFF / RAW</span>
                 </div>
                 <div class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></div>
 
-                <div class="pipeline-node" onclick="showPipelineModal('LiDAR Point Cloud', 'Dense 3D point cloud (30 pts/sq.m) capturing precise building envelopes and rooftop features.')">
-                    <i class="fa-solid fa-cloud" style="font-size: 1.8rem; color: var(--accent-blue); margin-bottom: 10px;"></i>
+                <div class="pipeline-node"
+                    onclick="showPipelineModal('LiDAR Point Cloud', 'Dense 3D point cloud (30 pts/sq.m) capturing precise building envelopes and rooftop features.')">
+                    <i class="fa-solid fa-cloud"
+                        style="font-size: 1.8rem; color: var(--accent-blue); margin-bottom: 10px;"></i>
                     <h4 style="font-size: 0.88rem;">LiDAR LAS</h4>
                     <span style="font-size: 0.7rem; color: var(--text-muted);">LAS / LAZ 1.4</span>
                 </div>
                 <div class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></div>
 
-                <div class="pipeline-node" onclick="showPipelineModal('CORS GNSS Network', 'Continuous Operating Reference Stations ensuring millimeter ground control accuracy.')">
-                    <i class="fa-solid fa-satellite" style="font-size: 1.8rem; color: var(--accent-emerald); margin-bottom: 10px;"></i>
+                <div class="pipeline-node"
+                    onclick="showPipelineModal('CORS GNSS Network', 'Continuous Operating Reference Stations ensuring millimeter ground control accuracy.')">
+                    <i class="fa-solid fa-satellite"
+                        style="font-size: 1.8rem; color: var(--accent-emerald); margin-bottom: 10px;"></i>
                     <h4 style="font-size: 0.88rem;">CORS RTK</h4>
                     <span style="font-size: 0.7rem; color: var(--text-muted);">NTRIP / RINEX</span>
                 </div>
                 <div class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></div>
 
-                <div class="pipeline-node" onclick="showPipelineModal('Building Floor Plans', 'Municipal approved architectural blueprints and IFC BIM files for indoor unit delineation.')">
-                    <i class="fa-solid fa-draw-polygon" style="font-size: 1.8rem; color: var(--accent-purple); margin-bottom: 10px;"></i>
+                <div class="pipeline-node"
+                    onclick="showPipelineModal('Building Floor Plans', 'Municipal approved architectural blueprints and IFC BIM files for indoor unit delineation.')">
+                    <i class="fa-solid fa-draw-polygon"
+                        style="font-size: 1.8rem; color: var(--accent-purple); margin-bottom: 10px;"></i>
                     <h4 style="font-size: 0.88rem;">BIM / IFC</h4>
                     <span style="font-size: 0.7rem; color: var(--text-muted);">IFC4 / CityGML 3.0</span>
                 </div>
                 <div class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></div>
 
-                <div class="pipeline-node" style="border-color: var(--accent-cyan); background: rgba(0,240,255,0.08);" onclick="showPipelineModal('AI Processing Engine', 'Transforms heterogeneous inputs into topologically closed 3D solid geometries with unique ULPIN hashes.')">
-                    <i class="fa-solid fa-brain" style="font-size: 1.8rem; color: var(--accent-cyan); margin-bottom: 10px;"></i>
+                <div class="pipeline-node" style="border-color: var(--accent-cyan); background: rgba(0,240,255,0.08);"
+                    onclick="showPipelineModal('AI Processing Engine', 'Transforms heterogeneous inputs into topologically closed 3D solid geometries with unique ULPIN hashes.')">
+                    <i class="fa-solid fa-brain"
+                        style="font-size: 1.8rem; color: var(--accent-cyan); margin-bottom: 10px;"></i>
                     <h4 style="font-size: 0.88rem;">AI Processing</h4>
                     <span style="font-size: 0.7rem; color: var(--accent-cyan); font-weight: 700;">3D ULPIN Engine</span>
                 </div>
                 <div class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></div>
 
-                <div class="pipeline-node" onclick="showPipelineModal('3D Cadastre WebGIS', 'Disseminates verified spatial property certificates to banks, courts, citizens, and municipalities.')">
-                    <i class="fa-solid fa-globe" style="font-size: 1.8rem; color: var(--accent-amber); margin-bottom: 10px;"></i>
+                <div class="pipeline-node"
+                    onclick="showPipelineModal('3D Cadastre WebGIS', 'Disseminates verified spatial property certificates to banks, courts, citizens, and municipalities.')">
+                    <i class="fa-solid fa-globe"
+                        style="font-size: 1.8rem; color: var(--accent-amber); margin-bottom: 10px;"></i>
                     <h4 style="font-size: 0.88rem;">WebGIS Platform</h4>
                     <span style="font-size: 0.7rem; color: var(--text-muted);">OGC 3D Tiles API</span>
                 </div>
@@ -2650,7 +2837,8 @@
                         <span>Urban Property Governance & Cadastral Analytics</span>
                     </h2>
                     <p class="section-header-sub">
-                        Real-time macroeconomic and spatial metrics on vertical density, tax revenue yield, utility compliance, and ownership distribution.
+                        Real-time macroeconomic and spatial metrics on vertical density, tax revenue yield, utility
+                        compliance, and ownership distribution.
                     </p>
                 </div>
             </div>
@@ -2658,28 +2846,33 @@
             <div class="charts-grid">
                 <div class="chart-box">
                     <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #fff;">
-                        <i class="fa-solid fa-chart-pie" style="color: var(--accent-cyan); margin-right: 6px;"></i> Surface vs Vertical Properties
+                        <i class="fa-solid fa-chart-pie" style="color: var(--accent-cyan); margin-right: 6px;"></i>
+                        Surface vs Vertical Properties
                     </h4>
                     <canvas id="chart-surface-vertical"></canvas>
                 </div>
 
                 <div class="chart-box">
                     <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #fff;">
-                        <i class="fa-solid fa-chart-simple" style="color: var(--accent-emerald); margin-right: 6px;"></i> Floor-wise Property Distribution
+                        <i class="fa-solid fa-chart-simple"
+                            style="color: var(--accent-emerald); margin-right: 6px;"></i> Floor-wise Property
+                        Distribution
                     </h4>
                     <canvas id="chart-floors"></canvas>
                 </div>
 
                 <div class="chart-box">
                     <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #fff;">
-                        <i class="fa-solid fa-chart-column" style="color: var(--accent-purple); margin-right: 6px;"></i> Subsurface Infrastructure Breakdown
+                        <i class="fa-solid fa-chart-column" style="color: var(--accent-purple); margin-right: 6px;"></i>
+                        Subsurface Infrastructure Breakdown
                     </h4>
                     <canvas id="chart-infrastructure"></canvas>
                 </div>
 
                 <div class="chart-box">
                     <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #fff;">
-                        <i class="fa-solid fa-shield-check" style="color: var(--accent-amber); margin-right: 6px;"></i> Cadastral Validation Status
+                        <i class="fa-solid fa-shield-check" style="color: var(--accent-amber); margin-right: 6px;"></i>
+                        Cadastral Validation Status
                     </h4>
                     <canvas id="chart-validation"></canvas>
                 </div>
@@ -2697,11 +2890,13 @@
                         <span>Cadastral Conflict Detection & Resolution Hub</span>
                     </h2>
                     <p class="section-header-sub">
-                        Automated topological audit identifying air-rights overlaps, underground pipeline intrusions, boundary disputes, and duplicate vertical claims.
+                        Automated topological audit identifying air-rights overlaps, underground pipeline intrusions,
+                        boundary disputes, and duplicate vertical claims.
                     </p>
                 </div>
                 <div>
-                    <button class="btn btn-emerald btn-sm" onclick="showToast('Exported Conflict Audit Report (PDF/GeoJSON)')">
+                    <button class="btn btn-emerald btn-sm"
+                        onclick="showToast('Exported Conflict Audit Report (PDF/GeoJSON)')">
                         <i class="fa-solid fa-file-export"></i> Export Audit Report
                     </button>
                 </div>
@@ -2740,7 +2935,9 @@
                 </div>
             </div>
             <div class="footer-disclaimer">
-                <strong>Prototype Notice:</strong> This web platform is an interactive demonstration prototype developed for Smart India Hackathon (SIH 2026) Problem Statement 229. Data and ULPIN values shown are simulated for demonstration purposes and should not be treated as official legal land records.
+                <strong>Prototype Notice:</strong> This web platform is an interactive demonstration prototype developed
+                for Smart India Hackathon (SIH 2026) Problem Statement 229. Data and ULPIN values shown are simulated
+                for demonstration purposes and should not be treated as official legal land records.
             </div>
         </footer>
     </div>
@@ -2756,8 +2953,10 @@
                 <div class="emblem-icon">
                     <i class="fa-solid fa-landmark"></i>
                 </div>
-                <h2 style="font-size: 1.3rem; letter-spacing: 0.04em;">DIGITAL 3D PROPERTY IDENTIFICATION CERTIFICATE</h2>
-                <div style="font-size: 0.78rem; color: var(--accent-cyan); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px;">
+                <h2 style="font-size: 1.3rem; letter-spacing: 0.04em;">DIGITAL 3D PROPERTY IDENTIFICATION CERTIFICATE
+                </h2>
+                <div
+                    style="font-size: 0.78rem; color: var(--accent-cyan); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px;">
                     Department of Land Resources • 3D Bhu-Aadhaar National Register
                 </div>
                 <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 2px;">
@@ -2769,7 +2968,8 @@
                 <div>
                     <div class="cert-field">
                         <div class="cert-field-label">Unique 3D ULPIN (Bhu-Aadhaar)</div>
-                        <div class="cert-field-value mono" style="color: var(--accent-cyan); font-size: 1.15rem;" id="cert-ulpin">
+                        <div class="cert-field-value mono" style="color: var(--accent-cyan); font-size: 1.15rem;"
+                            id="cert-ulpin">
                             BR-DBH-W12-B024-F03-U031
                         </div>
                     </div>
@@ -2809,15 +3009,18 @@
                     </div>
                 </div>
 
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); padding: 16px; border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
-                    <div id="cert-qrcode" style="background: #fff; padding: 6px; border-radius: 6px; margin-bottom: 10px;"></div>
+                <div
+                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); padding: 16px; border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
+                    <div id="cert-qrcode"
+                        style="background: #fff; padding: 6px; border-radius: 6px; margin-bottom: 10px;"></div>
                     <div style="font-size: 0.65rem; color: var(--text-muted); text-align: center;">
                         Scan with NIC Bhu-Aadhaar Mobile App for Cryptographic Verification
                     </div>
                 </div>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
                 <button class="btn btn-secondary btn-sm" onclick="closeCertModal()">
                     <i class="fa-solid fa-xmark"></i> Close Preview
                 </button>
@@ -2882,7 +3085,7 @@
            NAVIGATION & VIEW SWITCHER
            ========================================================================== */
         document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function(e) {
+            item.addEventListener('click', function (e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('data-target');
                 if (targetId) switchView(targetId);
@@ -2999,7 +3202,7 @@
             function animate() {
                 requestAnimationFrame(animate);
                 controls.update();
-                
+
                 // Subtle rotation for holographic markers
                 scene.traverse((obj) => {
                     if (obj.userData && obj.userData.isMarker) {
@@ -3024,11 +3227,11 @@
             parcelData.forEach(p => {
                 const borderGeo = new THREE.BufferGeometry();
                 const verts = new Float32Array([
-                    p.x - p.w/2, 0.05, p.z - p.d/2,
-                    p.x + p.w/2, 0.05, p.z - p.d/2,
-                    p.x + p.w/2, 0.05, p.z + p.d/2,
-                    p.x - p.w/2, 0.05, p.z + p.d/2,
-                    p.x - p.w/2, 0.05, p.z - p.d/2
+                    p.x - p.w / 2, 0.05, p.z - p.d / 2,
+                    p.x + p.w / 2, 0.05, p.z - p.d / 2,
+                    p.x + p.w / 2, 0.05, p.z + p.d / 2,
+                    p.x - p.w / 2, 0.05, p.z + p.d / 2,
+                    p.x - p.w / 2, 0.05, p.z - p.d / 2
                 ]);
                 borderGeo.setAttribute('position', new THREE.BufferAttribute(verts, 3));
                 const borderMat = new THREE.LineBasicMaterial({ color: 0x3b82f6, linewidth: 2 });
@@ -3396,7 +3599,7 @@
                 return;
             }
 
-            const filtered = DB.properties.filter(p => 
+            const filtered = DB.properties.filter(p =>
                 p.ulpin.toLowerCase().includes(query) ||
                 p.bld.toLowerCase().includes(query) ||
                 p.unit.toLowerCase().includes(query) ||
@@ -3746,4 +3949,5 @@
         });
     </script>
 </body>
+
 </html>
