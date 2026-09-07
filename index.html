@@ -1,0 +1,3749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D ULPIN – Unique Land Parcel Identification & Vertical Property Mapping System | SIH 2026 PS 229</title>
+    <meta name="description" content="Next-generation 3D Cadastral and Vertical Property Intelligence Platform for urban property governance, multi-storey ownership, and subsurface infrastructure mapping.">
+    <meta name="keywords" content="3D ULPIN, Bhu-Aadhaar, Cadastre 3D, Smart India Hackathon 2026, PS 229, Vertical Property Mapping, Underground Infrastructure">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- External CDN Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* ==========================================================================
+           CORE DESIGN SYSTEM & TOKENS
+           ========================================================================== */
+        :root {
+            --bg-primary: #060b18;
+            --bg-secondary: #0c1427;
+            --bg-tertiary: #131f38;
+            --bg-card: rgba(15, 25, 48, 0.75);
+            --bg-card-hover: rgba(23, 37, 70, 0.85);
+            --bg-glass: rgba(10, 18, 36, 0.65);
+            
+            --border-subtle: rgba(0, 240, 255, 0.12);
+            --border-medium: rgba(0, 240, 255, 0.25);
+            --border-glow: rgba(0, 240, 255, 0.5);
+            
+            --accent-cyan: #00f0ff;
+            --accent-blue: #3b82f6;
+            --accent-indigo: #6366f1;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --accent-purple: #a855f7;
+
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-heading: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --sidebar-width: 280px;
+            --header-height: 72px;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
+            
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.35);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+            --shadow-glow: 0 0 25px rgba(0, 240, 255, 0.2);
+            --shadow-glow-emerald: 0 0 25px rgba(16, 185, 129, 0.25);
+            --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* High-Contrast Tactical Theme */
+        body.theme-tactical {
+            --bg-primary: #020617;
+            --bg-secondary: #090e1f;
+            --bg-tertiary: #101935;
+            --bg-card: rgba(14, 23, 47, 0.9);
+            --border-subtle: rgba(16, 185, 129, 0.2);
+            --border-glow: rgba(16, 185, 129, 0.6);
+            --accent-cyan: #10b981;
+            --shadow-glow: 0 0 25px rgba(16, 185, 129, 0.25);
+        }
+
+        /* ==========================================================================
+           RESET & GLOBAL STYLES
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: var(--font-sans);
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        body {
+            display: flex;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 45%),
+                linear-gradient(to bottom, #060b18, #070e22);
+            background-attachment: fixed;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(6, 11, 24, 0.8);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 240, 255, 0.25);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-cyan);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            font-family: inherit;
+            border: none;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input, select, textarea {
+            font-family: inherit;
+            outline: none;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #fff;
+        }
+
+        .mono {
+            font-family: var(--font-mono);
+        }
+
+        .glow-text {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #00f0ff 0%, #3b82f6 50%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .glass-panel:hover {
+            border-color: var(--border-medium);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .glass-card {
+            background: rgba(19, 31, 56, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            transition: var(--transition);
+        }
+
+        .glass-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-medium);
+            transform: translateY(-2px);
+        }
+
+        /* Badges & Pills */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-sih {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.2));
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            color: #fbbf24;
+        }
+
+        .badge-cyan {
+            background: rgba(0, 240, 255, 0.12);
+            border: 1px solid rgba(0, 240, 255, 0.35);
+            color: var(--accent-cyan);
+        }
+
+        .badge-emerald {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: var(--accent-emerald);
+        }
+
+        .badge-amber {
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: var(--accent-amber);
+        }
+
+        .badge-rose {
+            background: rgba(244, 63, 94, 0.12);
+            border: 1px solid rgba(244, 63, 94, 0.35);
+            color: var(--accent-rose);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            box-shadow: 0 0 10px currentColor;
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.3); }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00f0ff 0%, #0099ff 100%);
+            color: #040915;
+            box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 240, 255, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: var(--border-medium);
+            color: #fff;
+        }
+
+        .btn-emerald {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-emerald:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: var(--radius-sm);
+        }
+
+        /* ==========================================================================
+           LAYOUT: SIDEBAR & MAIN CONTAINER
+           ========================================================================== */
+        #app-sidebar {
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            background: rgba(8, 14, 29, 0.85);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00f0ff, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #040915;
+            font-size: 1.4rem;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        .brand-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 0.68rem;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .sih-tag {
+            position: absolute;
+            right: 16px;
+            top: 16px;
+        }
+
+        /* Nav List */
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-category {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 12px 12px 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 14px;
+            border-radius: var(--radius-md);
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            position: relative;
+        }
+
+        .nav-item i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+            color: var(--text-dim);
+            transition: var(--transition);
+        }
+
+        .nav-item:hover {
+            color: #fff;
+            background: rgba(0, 240, 255, 0.06);
+            border-color: rgba(0, 240, 255, 0.15);
+        }
+
+        .nav-item:hover i {
+            color: var(--accent-cyan);
+        }
+
+        .nav-item.active {
+            color: #fff;
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.15), rgba(59, 130, 246, 0.08));
+            border-color: rgba(0, 240, 255, 0.35);
+            font-weight: 600;
+        }
+
+        .nav-item.active i {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 20%;
+            height: 60%;
+            width: 4px;
+            border-radius: 0 4px 4px 0;
+            background: var(--accent-cyan);
+            box-shadow: 0 0 12px var(--accent-cyan);
+        }
+
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border-subtle);
+            background: rgba(6, 11, 24, 0.6);
+        }
+
+        .status-chip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: rgba(19, 31, 56, 0.5);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* MAIN CONTENT AREA */
+        #main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Top Header */
+        #top-header {
+            height: var(--header-height);
+            background: rgba(8, 14, 29, 0.75);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .header-title-box h1 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title-box p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .system-indicators {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(15, 25, 48, 0.6);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .indicator-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .icon-btn:hover {
+            background: rgba(0, 240, 255, 0.1);
+            border-color: var(--border-medium);
+            color: var(--accent-cyan);
+        }
+
+        /* CONTENT VIEWS (Single-Page App Tabs) */
+        .content-section {
+            display: none;
+            padding: 32px;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .content-section.active-view {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin-bottom: 28px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-header-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-header-sub {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            max-width: 700px;
+        }
+
+        /* ==========================================================================
+           TAB 1: DASHBOARD
+           ========================================================================== */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .kpi-card:hover {
+            border-color: var(--border-medium);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), transparent);
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .kpi-icon {
+            font-size: 1.2rem;
+            color: var(--accent-cyan);
+            opacity: 0.8;
+        }
+
+        .kpi-value {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #fff;
+            margin: 12px 0 4px;
+            font-family: var(--font-heading);
+        }
+
+        .kpi-trend {
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Dashboard Middle Section */
+        .dashboard-main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .dashboard-viewport-box {
+            position: relative;
+            height: 460px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: #040814;
+            border: 1px solid var(--border-subtle);
+        }
+
+        #mini-3d-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .viewport-overlay-hud {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            pointer-events: none;
+        }
+
+        .hud-badge-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: auto;
+        }
+
+        .viewport-actions {
+            pointer-events: auto;
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Dashboard Right Panel: Problem & Impact */
+        .problem-solution-card {
+            background: linear-gradient(180deg, rgba(16, 28, 56, 0.8) 0%, rgba(9, 16, 32, 0.9) 100%);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .feature-bullet {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        .feature-bullet i {
+            color: var(--accent-cyan);
+            margin-top: 3px;
+            font-size: 0.9rem;
+        }
+
+        /* ==========================================================================
+           TAB 2: FULL 3D CADASTRAL MAP
+           ========================================================================== */
+        .map-section-container {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - var(--header-height) - 64px);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+            background: #020612;
+            box-shadow: var(--shadow-md);
+        }
+
+        #main-3d-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Floating Layer Controller */
+        .map-floating-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 290px;
+            max-height: calc(100% - 40px);
+            overflow-y: auto;
+            background: rgba(10, 18, 36, 0.88);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            z-index: 20;
+            box-shadow: var(--shadow-md);
+        }
+
+        .layer-category-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 14px 0 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .layer-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 4px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+        }
+
+        .layer-item:hover {
+            color: #fff;
+        }
+
+        .layer-item-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-pip {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+        }
+
+        /* Custom Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 34px;
+            height: 18px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255, 255, 255, 0.15);
+            transition: .3s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-cyan);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(16px);
+            background-color: #040915;
+        }
+
+        /* Floating Viewport Controls (Top Right) */
+        .map-view-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 20;
+        }
+
+        .map-btn {
+            background: rgba(10, 18, 36, 0.85);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--border-medium);
+            color: var(--text-main);
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .map-btn:hover {
+            background: rgba(0, 240, 255, 0.2);
+            border-color: var(--accent-cyan);
+            color: #fff;
+        }
+
+        .map-btn.active {
+            background: var(--accent-cyan);
+            color: #040915;
+            border-color: var(--accent-cyan);
+        }
+
+        /* Floating Building Inspector (Bottom Right) */
+        #building-inspector-panel {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            width: 360px;
+            background: rgba(10, 18, 36, 0.92);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--accent-cyan);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            z-index: 25;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
+            display: none;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .inspector-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .inspector-label {
+            color: var(--text-muted);
+        }
+
+        .inspector-val {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Floating Map Legend (Bottom Left) */
+        .map-legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(8, 14, 29, 0.85);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            z-index: 20;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ==========================================================================
+           TAB 3: ULPIN GENERATOR (3D BHU-AADHAAR STANDARD)
+           ========================================================================== */
+        .generator-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 28px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .form-control {
+            background: rgba(13, 22, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: #fff;
+            font-size: 0.88rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+            background: rgba(19, 31, 58, 0.95);
+        }
+
+        /* Live Preview Card */
+        .ulpin-preview-box {
+            background: linear-gradient(145deg, rgba(16, 28, 58, 0.9) 0%, rgba(8, 14, 30, 0.95) 100%);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .ulpin-code-display {
+            background: rgba(4, 9, 21, 0.8);
+            border: 1px dashed var(--accent-cyan);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            letter-spacing: 0.08em;
+            margin: 20px 0;
+            word-break: break-all;
+            box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.1);
+        }
+
+        .qr-placeholder {
+            width: 140px;
+            height: 140px;
+            background: #fff;
+            padding: 8px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #qrcode canvas, #qrcode img {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* ==========================================================================
+           TAB 4: PROPERTY SEARCH
+           ========================================================================== */
+        .search-hero {
+            background: linear-gradient(135deg, rgba(15, 25, 48, 0.8) 0%, rgba(9, 16, 32, 0.9) 100%);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            margin-bottom: 28px;
+        }
+
+        .search-bar-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .search-input-wrap {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input-wrap i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(6, 11, 24, 0.85);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            padding: 14px 16px 14px 48px;
+            font-size: 0.95rem;
+            color: #fff;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .quick-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .filter-chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-chip:hover, .filter-chip.active {
+            background: rgba(0, 240, 255, 0.15);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* Search Results Grid */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .property-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .property-card:hover {
+            border-color: var(--border-medium);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* ==========================================================================
+           TAB 5: VERTICAL PROPERTY EXPLORER (SKYSCRAPER VOXEL INSPECTOR)
+           ========================================================================== */
+        .vertical-explorer-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 340px;
+            gap: 24px;
+            min-height: 600px;
+        }
+
+        /* Floor Elevator Stack */
+        .floor-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: rgba(10, 18, 36, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            max-height: 650px;
+            overflow-y: auto;
+        }
+
+        .floor-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            background: rgba(19, 31, 56, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .floor-btn:hover {
+            background: rgba(0, 240, 255, 0.08);
+            border-color: rgba(0, 240, 255, 0.2);
+            color: #fff;
+        }
+
+        .floor-btn.active {
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.2), rgba(59, 130, 246, 0.15));
+            border-color: var(--accent-cyan);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        }
+
+        .floor-btn.basement {
+            border-left: 3px solid var(--accent-amber);
+        }
+
+        .floor-btn.roof {
+            border-left: 3px solid var(--accent-emerald);
+        }
+
+        /* 3D Floor Visualizer Display */
+        .floor-interactive-stage {
+            background: radial-gradient(circle at center, #0d1a38 0%, #050b18 100%);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .volumetric-diagram-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Units Grid on Floor */
+        .units-layout-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 540px;
+            margin-top: 20px;
+        }
+
+        .unit-box {
+            background: rgba(19, 31, 56, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .unit-box:hover, .unit-box.active {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 240, 255, 0.12);
+            transform: scale(1.03);
+        }
+
+        /* ==========================================================================
+           TAB 6: UNDERGROUND INFRASTRUCTURE (SUBSURFACE GIS)
+           ========================================================================== */
+        .underground-grid {
+            display: grid;
+            grid-template-columns: 2fr 1.1fr;
+            gap: 24px;
+        }
+
+        .subsurface-stage {
+            height: 480px;
+            background: linear-gradient(180deg, #091326 0%, #03060f 100%);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #underground-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .depth-meter-bar {
+            position: absolute;
+            left: 16px;
+            top: 20px;
+            bottom: 20px;
+            width: 44px;
+            background: rgba(6, 11, 24, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 8px 4px;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-align: center;
+            font-family: var(--font-mono);
+        }
+
+        /* ==========================================================================
+           TAB 7: AI / ML ANALYSIS PIPELINE
+           ========================================================================== */
+        .ai-pipeline-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .ai-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .ai-card.active-run {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+        }
+
+        .progress-track {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+            margin: 12px 0 6px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00f0ff, #3b82f6);
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        .ai-terminal-box {
+            background: #030610;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            color: #10b981;
+            height: 240px;
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+
+        /* ==========================================================================
+           TAB 8: DATA INTEGRATION PIPELINE
+           ========================================================================== */
+        .pipeline-flow-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 30px 20px;
+            background: rgba(10, 18, 36, 0.6);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            margin-bottom: 28px;
+        }
+
+        .pipeline-node {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            width: 170px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .pipeline-node:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .pipeline-arrow {
+            color: var(--accent-cyan);
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        /* ==========================================================================
+           TAB 9: GOVERNANCE & ANALYTICS
+           ========================================================================== */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .chart-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            height: 360px;
+            position: relative;
+        }
+
+        /* ==========================================================================
+           TAB 10: CONFLICT DETECTION
+           ========================================================================== */
+        .conflict-table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        .custom-table th {
+            background: rgba(8, 14, 29, 0.8);
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .custom-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+        }
+
+        .custom-table tr:hover td {
+            background: rgba(0, 240, 255, 0.04);
+        }
+
+        /* ==========================================================================
+           MODAL: DIGITAL 3D PROPERTY CERTIFICATE
+           ========================================================================== */
+        .modal-backdrop {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(2, 6, 18, 0.85);
+            backdrop-filter: blur(16px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .modal-backdrop.active {
+            display: flex;
+        }
+
+        .certificate-sheet {
+            width: 100%;
+            max-width: 760px;
+            background: linear-gradient(145deg, #091326 0%, #050b18 100%);
+            border: 2px solid var(--border-glow);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.35);
+            color: #fff;
+        }
+
+        .cert-header {
+            text-align: center;
+            border-bottom: 2px solid rgba(0, 240, 255, 0.3);
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .emblem-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 8px;
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #040915;
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .cert-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-25deg);
+            font-size: 5rem;
+            font-weight: 900;
+            color: rgba(0, 240, 255, 0.03);
+            pointer-events: none;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .cert-field {
+            margin-bottom: 12px;
+        }
+
+        .cert-field-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .cert-field-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* ==========================================================================
+           FOOTER
+           ========================================================================== */
+        #app-footer {
+            padding: 24px 32px;
+            border-top: 1px solid var(--border-subtle);
+            background: rgba(6, 11, 24, 0.85);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        .footer-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 12px;
+        }
+
+        /* Toast Notification */
+        #toast-box {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(10, 18, 36, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--accent-cyan);
+            border-radius: var(--radius-md);
+            padding: 12px 20px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-glow);
+            z-index: 300;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            #app-sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                bottom: 0;
+            }
+            #app-sidebar.open {
+                left: 0;
+            }
+            .dashboard-main-grid, .generator-grid, .charts-grid, .underground-grid {
+                grid-template-columns: 1fr;
+            }
+            .vertical-explorer-grid {
+                grid-template-columns: 1fr;
+            }
+            .ai-pipeline-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================================================
+         SIDEBAR NAVIGATION
+         ========================================================================== -->
+    <aside id="app-sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-cube"></i>
+            </div>
+            <div>
+                <div class="brand-title">3D ULPIN</div>
+                <div class="brand-subtitle">Cadastre 3.0</div>
+            </div>
+            <div class="sih-tag">
+                <span class="badge badge-sih"><i class="fa-solid fa-award"></i> SIH 2026</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-category">Main Navigation</div>
+            <a class="nav-item active" data-target="view-dashboard">
+                <i class="fa-solid fa-gauge-high"></i>
+                <span>Dashboard</span>
+            </a>
+            <a class="nav-item" data-target="view-map">
+                <i class="fa-solid fa-earth-asia"></i>
+                <span>3D Cadastral Map</span>
+            </a>
+            <a class="nav-item" data-target="view-generator">
+                <i class="fa-solid fa-fingerprint"></i>
+                <span>ULPIN Generator</span>
+            </a>
+            <a class="nav-item" data-target="view-search">
+                <i class="fa-solid fa-magnifying-glass-location"></i>
+                <span>Property Search</span>
+            </a>
+
+            <div class="nav-category">Volumetric Intelligence</div>
+            <a class="nav-item" data-target="view-vertical">
+                <i class="fa-solid fa-building"></i>
+                <span>Vertical Explorer</span>
+            </a>
+            <a class="nav-item" data-target="view-underground">
+                <i class="fa-solid fa-network-wired"></i>
+                <span>Underground Assets</span>
+            </a>
+            <a class="nav-item" data-target="view-ai">
+                <i class="fa-solid fa-brain"></i>
+                <span>AI/ML Analysis</span>
+            </a>
+
+            <div class="nav-category">Governance & Operations</div>
+            <a class="nav-item" data-target="view-pipeline">
+                <i class="fa-solid fa-diagram-project"></i>
+                <span>Data Integration</span>
+            </a>
+            <a class="nav-item" data-target="view-analytics">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Governance Analytics</span>
+            </a>
+            <a class="nav-item" data-target="view-conflicts">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>Conflict Hub</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="status-chip">
+                <span><i class="fa-solid fa-satellite-dish" style="color: var(--accent-cyan); margin-right: 6px;"></i> CORS RTK Node</span>
+                <span style="color: var(--accent-emerald); font-weight: 700;">±1.2 cm</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ==========================================================================
+         MAIN WRAPPER & HEADER
+         ========================================================================== -->
+    <div id="main-wrapper">
+        <!-- Top App Header -->
+        <header id="top-header">
+            <div class="header-left">
+                <button class="icon-btn" id="sidebar-toggle" style="display: none;">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="header-title-box">
+                    <h1>
+                        <i class="fa-solid fa-layer-group glow-text"></i>
+                        <span>National 3D Cadastral & Vertical Property Intelligence</span>
+                    </h1>
+                    <p>Digital India Land Records Modernization Programme (DILRMP) • 3D Bhu-Aadhaar Extension</p>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="system-indicators">
+                    <div class="indicator-item">
+                        <span class="pulse-dot" style="color: var(--accent-emerald);"></span>
+                        <span>System Online</span>
+                    </div>
+                    <div class="indicator-item">
+                        <span class="pulse-dot" style="color: var(--accent-cyan);"></span>
+                        <span>WebGL 3D Active</span>
+                    </div>
+                    <div class="indicator-item">
+                        <span class="pulse-dot" style="color: var(--accent-purple);"></span>
+                        <span>AI Engine Ready</span>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <button class="icon-btn" id="btn-theme-toggle" title="Toggle Theme">
+                        <i class="fa-solid fa-circle-half-stroke"></i>
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="switchView('view-generator')">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Generate 3D ULPIN</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- ==========================================================================
+             VIEW 1: DASHBOARD
+             ========================================================================== -->
+        <section id="view-dashboard" class="content-section active-view">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-header-title">
+                        <span>3D ULPIN & Vertical Property Mapping</span>
+                        <span class="badge badge-cyan">v3.4 Production Ready</span>
+                    </h2>
+                    <p class="section-header-sub">
+                        Next-generation 3D cadastral framework for accurate urban property governance, resolving spatial ambiguity in multi-storey apartments, underground infrastructure, and air rights.
+                    </p>
+                </div>
+                <div>
+                    <span class="badge badge-sih" style="padding: 8px 16px; font-size: 0.85rem;">
+                        <i class="fa-solid fa-trophy"></i> Smart India Hackathon 2026 | PS 229
+                    </span>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span>Total Land Parcels</span>
+                        <i class="fa-solid fa-map-location-dot kpi-icon"></i>
+                    </div>
+                    <div class="kpi-value">12,458</div>
+                    <div class="kpi-trend" style="color: var(--accent-emerald);">
+                        <i class="fa-solid fa-arrow-trend-up"></i> +4.2% this quarter
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span>3D Vertical Units</span>
+                        <i class="fa-solid fa-building-user kpi-icon"></i>
+                    </div>
+                    <div class="kpi-value">8,742</div>
+                    <div class="kpi-trend" style="color: var(--accent-cyan);">
+                        <i class="fa-solid fa-cubes"></i> 3.77 units/parcel avg
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span>Buildings Mapped</span>
+                        <i class="fa-solid fa-city kpi-icon"></i>
+                    </div>
+                    <div class="kpi-value">2,316</div>
+                    <div class="kpi-trend" style="color: var(--accent-indigo);">
+                        <i class="fa-solid fa-check-double"></i> 100% LiDAR scanned
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span>Underground Assets</span>
+                        <i class="fa-solid fa-network-wired kpi-icon"></i>
+                    </div>
+                    <div class="kpi-value">1,284</div>
+                    <div class="kpi-trend" style="color: var(--accent-amber);">
+                        <i class="fa-solid fa-layer-group"></i> 6 utility networks
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span>Validated Parcels</span>
+                        <i class="fa-solid fa-shield-halved kpi-icon"></i>
+                    </div>
+                    <div class="kpi-value" style="color: var(--accent-emerald);">96.8%</div>
+                    <div class="kpi-trend" style="color: var(--accent-emerald);">
+                        <i class="fa-solid fa-certificate"></i> High confidence
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span>Detected Conflicts</span>
+                        <i class="fa-solid fa-triangle-exclamation kpi-icon" style="color: var(--accent-rose);"></i>
+                    </div>
+                    <div class="kpi-value" style="color: var(--accent-rose);">27</div>
+                    <div class="kpi-trend" style="color: var(--accent-rose);">
+                        <i class="fa-solid fa-bolt"></i> 5 critical subsurface
+                    </div>
+                </div>
+            </div>
+
+            <!-- Central 3D Mini Viewport & Problem/Solution -->
+            <div class="dashboard-main-grid">
+                <div class="dashboard-viewport-box">
+                    <canvas id="mini-3d-canvas"></canvas>
+                    <div class="viewport-overlay-hud">
+                        <div class="hud-badge-group">
+                            <span class="badge badge-cyan"><i class="fa-solid fa-globe"></i> Interactive 3D Digital Twin</span>
+                            <span class="badge" style="background: rgba(0,0,0,0.6); color: #fff;">Rotate: Left Click • Pan: Right Click • Zoom: Scroll</span>
+                        </div>
+                        <div class="viewport-actions">
+                            <button class="btn btn-primary btn-sm" onclick="switchView('view-map')">
+                                <i class="fa-solid fa-expand"></i> Launch Full 3D Map
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="problem-solution-card">
+                    <div>
+                        <span class="badge badge-amber"><i class="fa-solid fa-lightbulb"></i> PS 229 Core Breakthrough</span>
+                        <h3 style="font-size: 1.25rem; margin-top: 8px;">2D vs 3D Cadastral Paradigm</h3>
+                    </div>
+
+                    <div class="feature-bullet">
+                        <i class="fa-solid fa-circle-xmark" style="color: var(--accent-rose);"></i>
+                        <div>
+                            <strong style="color: #fff;">Traditional 2D Failure:</strong> Flattened polygon records cannot assign distinct legal ownership to multiple apartment owners stacked on the same ground footprint.
+                        </div>
+                    </div>
+
+                    <div class="feature-bullet">
+                        <i class="fa-solid fa-circle-check" style="color: var(--accent-emerald);"></i>
+                        <div>
+                            <strong style="color: #fff;">3D Volumetric ULPIN:</strong> Adds standardized Z-elevation bounds, floor index, and unit delimiters to the 14-digit Bhu-Aadhaar base standard.
+                        </div>
+                    </div>
+
+                    <div class="feature-bullet">
+                        <i class="fa-solid fa-layer-group" style="color: var(--accent-cyan);"></i>
+                        <div>
+                            <strong style="color: #fff;">Subsurface Integration:</strong> Prevents uncoordinated excavation and property disputes by mapping deep utilities, metro tunnels, and basement easements.
+                        </div>
+                    </div>
+
+                    <div style="margin-top: auto; display: flex; gap: 10px;">
+                        <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="switchView('view-vertical')">
+                            <i class="fa-solid fa-building"></i> Vertical Explorer
+                        </button>
+                        <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="switchView('view-underground')">
+                            <i class="fa-solid fa-water"></i> Underground Map
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             VIEW 2: 3D CADASTRAL MAP (FULL THREE.JS INTERACTIVE SCENE)
+             ========================================================================== -->
+        <section id="view-map" class="content-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-header-title">
+                        <i class="fa-solid fa-earth-asia glow-text"></i>
+                        <span>3D Cadastral & Urban WebGIS Engine</span>
+                    </h2>
+                    <p class="section-header-sub">
+                        High-precision volumetric spatial browser with real-time raycasting, floor slicing, and subterranean infrastructure telemetry.
+                    </p>
+                </div>
+            </div>
+
+            <div class="map-section-container">
+                <canvas id="main-3d-canvas"></canvas>
+
+                <!-- Floating Layer Controller -->
+                <div class="map-floating-panel">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">
+                            <i class="fa-solid fa-sliders" style="color: var(--accent-cyan); margin-right: 6px;"></i> Layer Controls
+                        </span>
+                        <span class="badge badge-cyan">Active</span>
+                    </div>
+
+                    <div class="layer-category-title">Surface & Built Space</div>
+                    <div class="layer-item">
+                        <span class="layer-item-label">
+                            <span class="color-pip" style="background: #3b82f6;"></span> Surface Parcels
+                        </span>
+                        <label class="switch"><input type="checkbox" id="layer-parcels" checked onchange="toggleMapLayer('parcels')"><span class="slider"></span></label>
+                    </div>
+                    <div class="layer-item">
+                        <span class="layer-item-label">
+                            <span class="color-pip" style="background: #00f0ff;"></span> 3D Buildings
+                        </span>
+                        <label class="switch"><input type="checkbox" id="layer-buildings" checked onchange="toggleMapLayer('buildings')"><span class="slider"></span></label>
+                    </div>
+                    <div class="layer-item">
+                        <span class="layer-item-label">
+                            <span class="color-pip" style="background: #10b981;"></span> Floor Slices
+                        </span>
+                        <label class="switch"><input type="checkbox" id="layer-floors" checked onchange="toggleMapLayer('floors')"><span class="slider"></span></label>
+                    </div>
+                    <div class="layer-item">
+                        <span class="layer-item-label">
+                            <span class="color-pip" style="background: #64748b;"></span> Roadways & Footprints
+                        </span>
+                        <label class="switch"><input type="checkbox" id="layer-roads" checked onchange="toggleMapLayer('roads')"><span class="slider"></span></label>
+                    </div>
+
+                    <div class="layer-category-title">Underground Utilities</div>
+                    <div class="layer-item">
+                        <span class="layer-item-label">
+                            <span class="color-pip" style="background: #0284c7;"></span> Water Pipeline
+                        </span>
+                        <label class="switch"><input type="checkbox" id="layer-water" checked onchange="toggleMapLayer('water')"><span class="slider"></span></label>
+                    </div>
+                    <div class="layer-item">
+                        <span class="layer-item-label">
+                            <span class="color-pip" style="background: #a855f7;"></span> Sewer Network
+                        </span>
+                        <label class="switch"><input type="checkbox" id="layer-sewer" checked onchange="toggleMapLayer('sewer')"><span class="slider"></span></label>
+                    </div>
+                    <div class="layer-item">
+                        <span class="layer-item-label">
+                            <span class="color-pip" style="background: #ef4444;"></span> Electricity Grid
+                        </span>
+                        <label class="switch"><input type="checkbox" id="layer-electricity" checked onchange="toggleMapLayer('electricity')"><span class="slider"></span></label>
+                    </div>
+                    <div class="layer-item">
+                        <span class="layer-item-label">
+                            <span class="color-pip" style="background: #f59e0b;"></span> Telecom / Fiber
+                        </span>
+                        <label class="switch"><input type="checkbox" id="layer-telecom" checked onchange="toggleMapLayer('telecom')"><span class="slider"></span></label>
+                    </div>
+                </div>
+
+                <!-- Floating View Controls -->
+                <div class="map-view-controls">
+                    <button class="map-btn" onclick="mapCameraPreset('3d')" title="Isometric 3D View">
+                        <i class="fa-solid fa-cube"></i> 3D Volumetric
+                    </button>
+                    <button class="map-btn" onclick="mapCameraPreset('2d')" title="Orthographic Top View">
+                        <i class="fa-solid fa-map"></i> 2D Top View
+                    </button>
+                    <button class="map-btn" onclick="mapCameraPreset('underground')" title="Subsurface X-Ray">
+                        <i class="fa-solid fa-eye-dropper"></i> Subsurface X-Ray
+                    </button>
+                    <button class="map-btn" onclick="resetMapCamera()" title="Reset Camera">
+                        <i class="fa-solid fa-arrows-rotate"></i> Reset View
+                    </button>
+                </div>
+
+                <!-- Floating Building Inspector Panel -->
+                <div id="building-inspector-panel">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                        <span class="badge badge-cyan" id="insp-type">3D Building</span>
+                        <button class="icon-btn" onclick="closeInspector()" style="width: 28px; height: 28px;">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <h3 id="insp-name" style="font-size: 1.15rem; margin-bottom: 4px;">BLD-DBH-024</h3>
+                    <div class="mono" id="insp-ulpin" style="color: var(--accent-cyan); font-size: 0.82rem; margin-bottom: 14px;">BR-DBH-W12-B024-F03-U031</div>
+
+                    <div class="inspector-row">
+                        <span class="inspector-label">Total Floors:</span>
+                        <span class="inspector-val" id="insp-floors">8 Floors + 2 Basements</span>
+                    </div>
+                    <div class="inspector-row">
+                        <span class="inspector-label">Property Units:</span>
+                        <span class="inspector-val" id="insp-units">32 Units</span>
+                    </div>
+                    <div class="inspector-row">
+                        <span class="inspector-label">Total Built Area:</span>
+                        <span class="inspector-val" id="insp-area">24,850 sq.ft.</span>
+                    </div>
+                    <div class="inspector-row">
+                        <span class="inspector-label">Coordinates:</span>
+                        <span class="inspector-val mono" id="insp-coords">26.1542° N, 85.8972° E</span>
+                    </div>
+                    <div class="inspector-row">
+                        <span class="inspector-label">Validation Status:</span>
+                        <span class="inspector-val" style="color: var(--accent-emerald);"><i class="fa-solid fa-circle-check"></i> Verified Cadastre</span>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 18px;">
+                        <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="openVerticalFromInspector()">
+                            <i class="fa-solid fa-building"></i> Inspect Floors
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="openCertificateModalFromCurrent()">
+                            <i class="fa-solid fa-certificate"></i> Certificate
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Floating Legend -->
+                <div class="map-legend">
+                    <div class="legend-item"><span class="color-pip" style="background: #3b82f6;"></span> Surface Parcel</div>
+                    <div class="legend-item"><span class="color-pip" style="background: #00f0ff;"></span> 3D Building</div>
+                    <div class="legend-item"><span class="color-pip" style="background: #10b981;"></span> Selected Unit</div>
+                    <div class="legend-item"><span class="color-pip" style="background: #0284c7;"></span> Water Main</div>
+                    <div class="legend-item"><span class="color-pip" style="background: #ef4444;"></span> Electricity</div>
+                    <div class="legend-item"><span class="color-pip" style="background: #f43f5e;"></span> Conflict Zone</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             VIEW 3: ULPIN GENERATOR (3D BHU-AADHAAR STANDARD)
+             ========================================================================== -->
+        <section id="view-generator" class="content-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-header-title">
+                        <i class="fa-solid fa-fingerprint glow-text"></i>
+                        <span>3D ULPIN Standard Generator</span>
+                    </h2>
+                    <p class="section-header-sub">
+                        Generate standardized 3D Bhu-Aadhaar identifiers encoding volumetric spatial coordinates, floor elevation offsets, and multi-unit vertical topology.
+                    </p>
+                </div>
+                <div>
+                    <span class="badge badge-cyan"><i class="fa-solid fa-barcode"></i> Formula: [State]-[Dist]-[Ward]-[Parcel]-[Bld]-[Floor]-[Unit]</span>
+                </div>
+            </div>
+
+            <div class="generator-grid">
+                <!-- Form -->
+                <div class="glass-panel" style="padding: 28px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 20px; color: #fff;">
+                        <i class="fa-solid fa-pen-to-square" style="color: var(--accent-cyan); margin-right: 8px;"></i> Parcel & Property Parameters
+                    </h3>
+
+                    <form id="ulpin-form" class="form-grid" onsubmit="handleGenerateULPIN(event)">
+                        <div class="form-group">
+                            <label class="form-label">State</label>
+                            <select id="inp-state" class="form-control" onchange="autoUpdateULPIN()">
+                                <option value="BR">Bihar (BR)</option>
+                                <option value="MH">Maharashtra (MH)</option>
+                                <option value="DL">Delhi (DL)</option>
+                                <option value="KA">Karnataka (KA)</option>
+                                <option value="TS">Telangana (TS)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">District</label>
+                            <input type="text" id="inp-district" class="form-control" value="DBH" placeholder="e.g., DBH, MUM, BLR" oninput="autoUpdateULPIN()">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">City / Ward</label>
+                            <input type="text" id="inp-ward" class="form-control" value="W12" placeholder="e.g., W12, Z04" oninput="autoUpdateULPIN()">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Village / Mouza</label>
+                            <input type="text" id="inp-mouza" class="form-control" value="Lalbagh" placeholder="Mouza name">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Parcel ID (2D Base)</label>
+                            <input type="text" id="inp-parcel" class="form-control" value="P408" placeholder="e.g., P408" oninput="autoUpdateULPIN()">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Building ID</label>
+                            <input type="text" id="inp-bld" class="form-control" value="B024" placeholder="e.g., B024" oninput="autoUpdateULPIN()">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Floor Number</label>
+                            <select id="inp-floor" class="form-control" onchange="autoUpdateULPIN()">
+                                <option value="RF">Roof (RF)</option>
+                                <option value="F08">Floor 08</option>
+                                <option value="F07">Floor 07</option>
+                                <option value="F06">Floor 06</option>
+                                <option value="F05">Floor 05</option>
+                                <option value="F04">Floor 04</option>
+                                <option value="F03" selected>Floor 03</option>
+                                <option value="F02">Floor 02</option>
+                                <option value="F01">Floor 01</option>
+                                <option value="G00">Ground Floor (G00)</option>
+                                <option value="B01">Basement 01 (B01)</option>
+                                <option value="B02">Basement 02 (B02)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Unit / Flat Number</label>
+                            <input type="text" id="inp-unit" class="form-control" value="U031" placeholder="e.g., U031, PK04" oninput="autoUpdateULPIN()">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Latitude (°N)</label>
+                            <input type="text" id="inp-lat" class="form-control mono" value="26.15428" placeholder="26.15428">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Longitude (°E)</label>
+                            <input type="text" id="inp-lng" class="form-control mono" value="85.89721" placeholder="85.89721">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Elevation (Z Offset in meters)</label>
+                            <input type="text" id="inp-elevation" class="form-control mono" value="+12.5m" placeholder="+12.5m">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Property Classification</label>
+                            <select id="inp-type" class="form-control">
+                                <option value="Apartment (Residential)">Apartment (Residential)</option>
+                                <option value="Commercial Unit">Commercial Unit</option>
+                                <option value="Surface Parcel">Surface Parcel</option>
+                                <option value="Parking Slot">Parking Slot</option>
+                                <option value="Underground Utility">Underground Utility</option>
+                                <option value="Infrastructure Corridor">Infrastructure Corridor</option>
+                                <option value="Air Rights Property">Air Rights Property</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width" style="margin-top: 8px;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> GENERATE STANDARDIZED 3D ULPIN
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Preview Display -->
+                <div class="ulpin-preview-box">
+                    <span class="badge badge-emerald"><i class="fa-solid fa-circle-check"></i> Standard Compliant (ISO/TC 211 & LADM 3D)</span>
+                    <h3 style="margin-top: 14px; font-size: 1.3rem;">3D ULPIN Output</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Unique Volumetric Cadastral Property Identifier</p>
+
+                    <div class="ulpin-code-display mono" id="display-generated-ulpin">
+                        BR-DBH-W12-B024-F03-U031
+                    </div>
+
+                    <!-- Dynamic QR Canvas -->
+                    <div class="qr-placeholder" id="qrcode"></div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; max-width: 380px;">
+                        <button class="btn btn-secondary btn-sm" onclick="copyULPIN()">
+                            <i class="fa-solid fa-copy"></i> Copy ULPIN
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="switchView('view-map')">
+                            <i class="fa-solid fa-map-location-dot"></i> View in 3D Map
+                        </button>
+                        <button class="btn btn-emerald btn-sm" style="grid-column: 1 / -1;" onclick="openCertificateModal()">
+                            <i class="fa-solid fa-file-contract"></i> View Digital Property Certificate
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 20px; font-size: 0.72rem; color: var(--text-dim); text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 12px;">
+                        <i class="fa-solid fa-shield-halved"></i> Prototype / Demonstration ULPIN generated for Smart India Hackathon 2026.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             VIEW 4: PROPERTY SEARCH
+             ========================================================================== -->
+        <section id="view-search" class="content-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-header-title">
+                        <i class="fa-solid fa-magnifying-glass-location glow-text"></i>
+                        <span>Smart Multi-Parameter Property Search</span>
+                    </h2>
+                    <p class="section-header-sub">
+                        Lookup surface parcels, high-rise apartment units, commercial suites, and subterranean rights across the unified 3D registry.
+                    </p>
+                </div>
+            </div>
+
+            <div class="search-hero">
+                <div class="search-bar-container">
+                    <div class="search-input-wrap">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="prop-search-query" class="search-input" placeholder="Search by ULPIN, Parcel ID, Building Name, Flat Number, or Lat/Lng..." oninput="handlePropertySearch()">
+                    </div>
+                    <button class="btn btn-primary" onclick="handlePropertySearch()">
+                        <i class="fa-solid fa-filter"></i> Search Registry
+                    </button>
+                </div>
+
+                <div class="quick-chips">
+                    <span style="font-size: 0.75rem; color: var(--text-dim); align-self: center; margin-right: 4px;">Quick Filters:</span>
+                    <span class="filter-chip active" onclick="filterChipSearch('ALL')">All Records</span>
+                    <span class="filter-chip" onclick="filterChipSearch('Apartment')">Apartments</span>
+                    <span class="filter-chip" onclick="filterChipSearch('Commercial')">Commercial</span>
+                    <span class="filter-chip" onclick="filterChipSearch('Underground')">Underground</span>
+                    <span class="filter-chip" onclick="filterChipSearch('Conflict')">Has Conflict</span>
+                </div>
+            </div>
+
+            <!-- Search Results -->
+            <div class="results-grid" id="search-results-container">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             VIEW 5: VERTICAL PROPERTY EXPLORER
+             ========================================================================== -->
+        <section id="view-vertical" class="content-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-header-title">
+                        <i class="fa-solid fa-building glow-text"></i>
+                        <span>Vertical Property Explorer</span>
+                    </h2>
+                    <p class="section-header-sub">
+                        Interactive volumetric skyscraper decomposition. Inspect individual floor levels, subdivided units, air rights, and vertical utility shafts.
+                    </p>
+                </div>
+                <div>
+                    <span class="badge badge-cyan">Building: BLD-DBH-024 (Skyline Towers)</span>
+                </div>
+            </div>
+
+            <div class="vertical-explorer-grid">
+                <!-- Left: Floor Elevator Column -->
+                <div class="floor-stack" id="floor-elevator-list">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">
+                        <i class="fa-solid fa-stairs" style="color: var(--accent-cyan);"></i> Select Floor Level
+                    </div>
+                    <button class="floor-btn roof" onclick="selectFloorLevel('RF', 'Roof Top Terrace & Solar Array', 28.0, 'Air Rights / Common Space')">
+                        <span>Roof Level</span><span class="mono">+28.0m</span>
+                    </button>
+                    <button class="floor-btn" onclick="selectFloorLevel('F08', 'Penthouse Suites (P01-P04)', 24.5, 'Luxury Residential')">
+                        <span>Floor 08</span><span class="mono">+24.5m</span>
+                    </button>
+                    <button class="floor-btn" onclick="selectFloorLevel('F07', 'Residential Units (U71-U74)', 21.0, 'Residential')">
+                        <span>Floor 07</span><span class="mono">+21.0m</span>
+                    </button>
+                    <button class="floor-btn" onclick="selectFloorLevel('F06', 'Residential Units (U61-U64)', 17.5, 'Residential')">
+                        <span>Floor 06</span><span class="mono">+17.5m</span>
+                    </button>
+                    <button class="floor-btn" onclick="selectFloorLevel('F05', 'Residential Units (U51-U54)', 14.0, 'Residential')">
+                        <span>Floor 05</span><span class="mono">+14.0m</span>
+                    </button>
+                    <button class="floor-btn" onclick="selectFloorLevel('F04', 'Residential Units (U41-U44)', 10.5, 'Residential')">
+                        <span>Floor 04</span><span class="mono">+10.5m</span>
+                    </button>
+                    <button class="floor-btn active" onclick="selectFloorLevel('F03', 'Residential Units (U31-U34)', 7.0, 'Residential')">
+                        <span>Floor 03</span><span class="mono">+7.0m</span>
+                    </button>
+                    <button class="floor-btn" onclick="selectFloorLevel('F02', 'Commercial Suites (C21-C24)', 3.5, 'Commercial Office')">
+                        <span>Floor 02</span><span class="mono">+3.5m</span>
+                    </button>
+                    <button class="floor-btn" onclick="selectFloorLevel('F01', 'Retail Spaces (R11-R14)', 0.0, 'Retail / Banking')">
+                        <span>Floor 01</span><span class="mono">+0.0m</span>
+                    </button>
+                    <button class="floor-btn" onclick="selectFloorLevel('G00', 'Lobby & Security Hub', 0.0, 'Common Amenity')">
+                        <span>Ground Floor</span><span class="mono">0.0m</span>
+                    </button>
+                    <button class="floor-btn basement" onclick="selectFloorLevel('B01', 'Basement Parking (P01-P18)', -3.5, 'Dedicated Parking')">
+                        <span>Basement B1</span><span class="mono">-3.5m</span>
+                    </button>
+                    <button class="floor-btn basement" onclick="selectFloorLevel('B02', 'Utility & HVAC Substation', -7.0, 'Subsurface Utility')">
+                        <span>Basement B2</span><span class="mono">-7.0m</span>
+                    </button>
+                </div>
+
+                <!-- Center: Interactive Floor Layout Stage -->
+                <div class="floor-interactive-stage">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <h3 id="stage-floor-title" style="font-size: 1.3rem;">Floor 03 Level Overview</h3>
+                            <p id="stage-floor-sub" style="font-size: 0.82rem; color: var(--text-muted);">Elevation: +7.0m AMSL • 4 Volumetric Units Configured</p>
+                        </div>
+                        <span class="badge badge-emerald" id="stage-floor-badge">Occupancy: 100%</span>
+                    </div>
+
+                    <!-- 3D Voxel Graphic Representation -->
+                    <div class="volumetric-diagram-box">
+                        <svg viewBox="0 0 500 220" style="width: 100%; max-height: 220px; filter: drop-shadow(0 0 20px rgba(0,240,255,0.25));">
+                            <!-- 3D Isometric Building Slab Graphic -->
+                            <polygon points="250,20 450,90 250,160 50,90" fill="rgba(0, 240, 255, 0.15)" stroke="#00f0ff" stroke-width="2"/>
+                            <polygon points="50,90 250,160 250,200 50,130" fill="rgba(16, 28, 56, 0.85)" stroke="#00f0ff" stroke-width="2"/>
+                            <polygon points="450,90 250,160 250,200 450,130" fill="rgba(9, 16, 36, 0.95)" stroke="#00f0ff" stroke-width="2"/>
+                            
+                            <!-- Subdivided Unit Boxes on Top Face -->
+                            <polygon points="250,25 345,60 250,95 155,60" fill="rgba(16, 185, 129, 0.35)" stroke="#10b981" stroke-width="1.5"/>
+                            <text x="250" y="65" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit U031</text>
+
+                            <polygon points="350,62 445,95 350,130 255,97" fill="rgba(59, 130, 246, 0.3)" stroke="#3b82f6" stroke-width="1.5"/>
+                            <text x="350" y="100" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit U032</text>
+
+                            <polygon points="150,62 245,95 150,130 55,97" fill="rgba(168, 85, 247, 0.3)" stroke="#a855f7" stroke-width="1.5"/>
+                            <text x="150" y="100" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit U033</text>
+
+                            <polygon points="250,100 345,133 250,155 155,133" fill="rgba(245, 158, 11, 0.3)" stroke="#f59e0b" stroke-width="1.5"/>
+                            <text x="250" y="135" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Unit U034</text>
+                        </svg>
+                    </div>
+
+                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                        Click a unit to inspect volumetric property rights:
+                    </div>
+                    <div class="units-layout-grid" id="floor-units-list">
+                        <div class="unit-box active" onclick="selectUnitDetails('U031', '1,250 sq.ft.', 'BR-DBH-W12-B024-F03-U031', 'Rajesh Sharma', '+7.0m to +10.5m')">
+                            <strong style="color: var(--accent-cyan); font-size: 0.9rem;">U-031</strong>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">2BHK • 1,250 sq.ft.</div>
+                        </div>
+                        <div class="unit-box" onclick="selectUnitDetails('U032', '1,420 sq.ft.', 'BR-DBH-W12-B024-F03-U032', 'Priya Verma', '+7.0m to +10.5m')">
+                            <strong style="color: var(--accent-blue); font-size: 0.9rem;">U-032</strong>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">3BHK • 1,420 sq.ft.</div>
+                        </div>
+                        <div class="unit-box" onclick="selectUnitDetails('U033', '1,180 sq.ft.', 'BR-DBH-W12-B024-F03-U033', 'Amitabh Roy', '+7.0m to +10.5m')">
+                            <strong style="color: var(--accent-purple); font-size: 0.9rem;">U-033</strong>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">2BHK • 1,180 sq.ft.</div>
+                        </div>
+                        <div class="unit-box" onclick="selectUnitDetails('U034', '1,650 sq.ft.', 'BR-DBH-W12-B024-F03-U034', 'Sunita Devi', '+7.0m to +10.5m')">
+                            <strong style="color: var(--accent-amber); font-size: 0.9rem;">U-034</strong>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">3BHK • 1,650 sq.ft.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Selected Unit Inspector Card -->
+                <div class="glass-panel" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <span class="badge badge-cyan" id="unit-badge">Volumetric Unit</span>
+                        <h3 id="unit-name" style="font-size: 1.3rem; margin: 8px 0 2px;">Unit U-031</h3>
+                        <div class="mono" id="unit-ulpin" style="color: var(--accent-cyan); font-size: 0.8rem; margin-bottom: 16px;">BR-DBH-W12-B024-F03-U031</div>
+
+                        <div class="inspector-row">
+                            <span class="inspector-label">Owner of Record:</span>
+                            <span class="inspector-val" id="unit-owner">Rajesh Sharma</span>
+                        </div>
+                        <div class="inspector-row">
+                            <span class="inspector-label">Carpet Area:</span>
+                            <span class="inspector-val" id="unit-area">1,250 sq.ft.</span>
+                        </div>
+                        <div class="inspector-row">
+                            <span class="inspector-label">Vertical Bounds:</span>
+                            <span class="inspector-val mono" id="unit-bounds">+7.0m to +10.5m</span>
+                        </div>
+                        <div class="inspector-row">
+                            <span class="inspector-label">Air Rights Extent:</span>
+                            <span class="inspector-val">Capped at Ceiling Slab</span>
+                        </div>
+                        <div class="inspector-row">
+                            <span class="inspector-label">Connected Utilities:</span>
+                            <span class="inspector-val" style="color: var(--accent-emerald);"><i class="fa-solid fa-bolt"></i> Power • <i class="fa-solid fa-water"></i> Water</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 20px;">
+                        <button class="btn btn-primary btn-sm" onclick="openCertificateModalFromCurrent()">
+                            <i class="fa-solid fa-certificate"></i> Generate 3D Certificate
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="copyText(document.getElementById('unit-ulpin').innerText, 'ULPIN copied!')">
+                            <i class="fa-solid fa-copy"></i> Copy 3D ULPIN
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             VIEW 6: UNDERGROUND INFRASTRUCTURE (SUBSURFACE GIS)
+             ========================================================================== -->
+        <section id="view-underground" class="content-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-header-title">
+                        <i class="fa-solid fa-network-wired glow-text"></i>
+                        <span>Underground Infrastructure & Subsurface Utility GIS</span>
+                    </h2>
+                    <p class="section-header-sub">
+                        3D Subsurface mapping of potable water mains, sewer trunks, power conduits, gas distribution, and metro corridors to prevent encroachment and utility clashes.
+                    </p>
+                </div>
+            </div>
+
+            <div class="underground-grid">
+                <div class="subsurface-stage">
+                    <canvas id="underground-canvas"></canvas>
+                    <div class="depth-meter-bar">
+                        <span>0m</span>
+                        <span>-5m</span>
+                        <span>-10m</span>
+                        <span>-15m</span>
+                        <span>-20m</span>
+                    </div>
+
+                    <div style="position: absolute; top: 16px; right: 16px; display: flex; gap: 8px;">
+                        <button class="map-btn active" onclick="setUndergroundMode('all')">All Utilities</button>
+                        <button class="map-btn" onclick="setUndergroundMode('water')">Water Only</button>
+                        <button class="map-btn" onclick="setUndergroundMode('clash')">Clash Highlight</button>
+                    </div>
+                </div>
+
+                <!-- Conflict Alert Panel -->
+                <div class="glass-panel" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+                    <div>
+                        <span class="badge badge-rose"><i class="fa-solid fa-triangle-exclamation"></i> Spatial Clash Detected</span>
+                        <h3 style="font-size: 1.15rem; margin-top: 8px;">Subsurface Utility Conflict #SC-04</h3>
+                    </div>
+
+                    <div class="glass-card" style="border-left: 4px solid var(--accent-rose);">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);">
+                            <span>Utility Line:</span>
+                            <strong style="color: #fff;">Water Pipeline WP-1024</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+                            <span>Depth Level:</span>
+                            <strong class="mono" style="color: var(--accent-cyan);">-4.2 meters</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+                            <span>Affected Parcel:</span>
+                            <strong class="mono" style="color: #fff;">BR-DBH-W12-B024</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+                            <span>Risk Rating:</span>
+                            <span class="badge badge-rose">HIGH SEVERITY</span>
+                        </div>
+                    </div>
+
+                    <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
+                        <strong style="color: #fff;">Issue Description:</strong> Deep foundation pilings for Building B024 intersect within 0.8m buffer zone of municipal 600mm water main. Automated excavation clearance denied.
+                    </p>
+
+                    <div style="margin-top: auto; display: flex; gap: 10px;">
+                        <button class="btn btn-emerald btn-sm" style="flex: 1;" onclick="showToast('Notified Municipal Water Corporation and Survey Team')">
+                            <i class="fa-solid fa-envelope"></i> Notify Utility Dept
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="switchView('view-conflicts')">
+                            <i class="fa-solid fa-arrow-right"></i> Conflict Hub
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             VIEW 7: AI/ML ANALYSIS PIPELINE
+             ========================================================================== -->
+        <section id="view-ai" class="content-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-header-title">
+                        <i class="fa-solid fa-brain glow-text"></i>
+                        <span>AI / ML Cadastral Extraction & Validation Engine</span>
+                    </h2>
+                    <p class="section-header-sub">
+                        Deep learning models for automated building footprint extraction, volumetric floor segmentation from point clouds, and air rights topology validation.
+                    </p>
+                </div>
+                <div>
+                    <button class="btn btn-primary" id="btn-run-ai" onclick="runAIPipeline()">
+                        <i class="fa-solid fa-play"></i> Run AI Validation Pipeline
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4 AI Modules Grid -->
+            <div class="ai-pipeline-grid">
+                <div class="ai-card" id="ai-mod-1">
+                    <div>
+                        <span class="badge badge-cyan">Module 1</span>
+                        <h3 style="font-size: 1.05rem; margin: 8px 0;">Building Footprint Extraction</h3>
+                        <p style="font-size: 0.78rem; color: var(--text-muted);">Mask R-CNN on 5cm UAV Orthomosaics</p>
+                    </div>
+                    <div>
+                        <div class="progress-track"><div class="progress-bar-fill" id="ai-prog-1"></div></div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                            <span>Confidence Score</span>
+                            <strong class="mono" id="ai-score-1">98.4%</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-card" id="ai-mod-2">
+                    <div>
+                        <span class="badge badge-indigo">Module 2</span>
+                        <h3 style="font-size: 1.05rem; margin: 8px 0;">Volumetric Floor Segmentation</h3>
+                        <p style="font-size: 0.78rem; color: var(--text-muted);">PointNet++ on LiDAR 3D Point Cloud</p>
+                    </div>
+                    <div>
+                        <div class="progress-track"><div class="progress-bar-fill" id="ai-prog-2"></div></div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                            <span>Confidence Score</span>
+                            <strong class="mono" id="ai-score-2">94.7%</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-card" id="ai-mod-3">
+                    <div>
+                        <span class="badge badge-emerald">Module 3</span>
+                        <h3 style="font-size: 1.05rem; margin: 8px 0;">Vertical Parcel Delineation</h3>
+                        <p style="font-size: 0.78rem; color: var(--text-muted);">BIM/IFC floor plan vectorization</p>
+                    </div>
+                    <div>
+                        <div class="progress-track"><div class="progress-bar-fill" id="ai-prog-3"></div></div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                            <span>Confidence Score</span>
+                            <strong class="mono" id="ai-score-3">96.2%</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-card" id="ai-mod-4">
+                    <div>
+                        <span class="badge badge-purple">Module 4</span>
+                        <h3 style="font-size: 1.05rem; margin: 8px 0;">Topology & Air-Rights Check</h3>
+                        <p style="font-size: 0.78rem; color: var(--text-muted);">Graph Neural Network (GNN) validator</p>
+                    </div>
+                    <div>
+                        <div class="progress-track"><div class="progress-bar-fill" id="ai-prog-4"></div></div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                            <span>Confidence Score</span>
+                            <strong class="mono" id="ai-score-4">97.1%</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terminal Execution Logs -->
+            <div class="glass-panel" style="padding: 20px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <span style="font-size: 0.85rem; font-weight: 700; color: #fff;">
+                        <i class="fa-solid fa-terminal" style="color: var(--accent-cyan); margin-right: 8px;"></i> Live Neural Inference Telemetry
+                    </span>
+                    <span class="badge badge-emerald"><span class="pulse-dot"></span> CUDA Accelerated</span>
+                </div>
+                <div class="ai-terminal-box" id="ai-terminal">
+                    <div>[SYS_INIT] 3D Cadastral Neural Validation Engine initialized.</div>
+                    <div>[DATA_INGEST] Loaded 12,458 LiDAR point cloud tiles and 2,316 vector footprints.</div>
+                    <div>[READY] Press "Run AI Validation Pipeline" to execute live batch inference.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             VIEW 8: DATA INTEGRATION PIPELINE
+             ========================================================================== -->
+        <section id="view-pipeline" class="content-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-header-title">
+                        <i class="fa-solid fa-diagram-project glow-text"></i>
+                        <span>Multi-Source 3D Cadastral Ingestion Architecture</span>
+                    </h2>
+                    <p class="section-header-sub">
+                        End-to-end data pipeline harmonizing airborne LiDAR, UAV photogrammetry, CORS GNSS ground control, and Municipal BIM models into the standard 3D ULPIN registry.
+                    </p>
+                </div>
+            </div>
+
+            <div class="pipeline-flow-container">
+                <div class="pipeline-node" onclick="showPipelineModal('Drone Photogrammetry', '5cm GSD high-resolution UAV imagery for surface orthomosaics and texture generation.')">
+                    <i class="fa-solid fa-drone" style="font-size: 1.8rem; color: var(--accent-cyan); margin-bottom: 10px;"></i>
+                    <h4 style="font-size: 0.88rem;">Drone Imagery</h4>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">GeoTIFF / RAW</span>
+                </div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                <div class="pipeline-node" onclick="showPipelineModal('LiDAR Point Cloud', 'Dense 3D point cloud (30 pts/sq.m) capturing precise building envelopes and rooftop features.')">
+                    <i class="fa-solid fa-cloud" style="font-size: 1.8rem; color: var(--accent-blue); margin-bottom: 10px;"></i>
+                    <h4 style="font-size: 0.88rem;">LiDAR LAS</h4>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">LAS / LAZ 1.4</span>
+                </div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                <div class="pipeline-node" onclick="showPipelineModal('CORS GNSS Network', 'Continuous Operating Reference Stations ensuring millimeter ground control accuracy.')">
+                    <i class="fa-solid fa-satellite" style="font-size: 1.8rem; color: var(--accent-emerald); margin-bottom: 10px;"></i>
+                    <h4 style="font-size: 0.88rem;">CORS RTK</h4>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">NTRIP / RINEX</span>
+                </div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                <div class="pipeline-node" onclick="showPipelineModal('Building Floor Plans', 'Municipal approved architectural blueprints and IFC BIM files for indoor unit delineation.')">
+                    <i class="fa-solid fa-draw-polygon" style="font-size: 1.8rem; color: var(--accent-purple); margin-bottom: 10px;"></i>
+                    <h4 style="font-size: 0.88rem;">BIM / IFC</h4>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">IFC4 / CityGML 3.0</span>
+                </div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                <div class="pipeline-node" style="border-color: var(--accent-cyan); background: rgba(0,240,255,0.08);" onclick="showPipelineModal('AI Processing Engine', 'Transforms heterogeneous inputs into topologically closed 3D solid geometries with unique ULPIN hashes.')">
+                    <i class="fa-solid fa-brain" style="font-size: 1.8rem; color: var(--accent-cyan); margin-bottom: 10px;"></i>
+                    <h4 style="font-size: 0.88rem;">AI Processing</h4>
+                    <span style="font-size: 0.7rem; color: var(--accent-cyan); font-weight: 700;">3D ULPIN Engine</span>
+                </div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                <div class="pipeline-node" onclick="showPipelineModal('3D Cadastre WebGIS', 'Disseminates verified spatial property certificates to banks, courts, citizens, and municipalities.')">
+                    <i class="fa-solid fa-globe" style="font-size: 1.8rem; color: var(--accent-amber); margin-bottom: 10px;"></i>
+                    <h4 style="font-size: 0.88rem;">WebGIS Platform</h4>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">OGC 3D Tiles API</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             VIEW 9: GOVERNANCE ANALYTICS
+             ========================================================================== -->
+        <section id="view-analytics" class="content-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-header-title">
+                        <i class="fa-solid fa-chart-pie glow-text"></i>
+                        <span>Urban Property Governance & Cadastral Analytics</span>
+                    </h2>
+                    <p class="section-header-sub">
+                        Real-time macroeconomic and spatial metrics on vertical density, tax revenue yield, utility compliance, and ownership distribution.
+                    </p>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-box">
+                    <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #fff;">
+                        <i class="fa-solid fa-chart-pie" style="color: var(--accent-cyan); margin-right: 6px;"></i> Surface vs Vertical Properties
+                    </h4>
+                    <canvas id="chart-surface-vertical"></canvas>
+                </div>
+
+                <div class="chart-box">
+                    <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #fff;">
+                        <i class="fa-solid fa-chart-simple" style="color: var(--accent-emerald); margin-right: 6px;"></i> Floor-wise Property Distribution
+                    </h4>
+                    <canvas id="chart-floors"></canvas>
+                </div>
+
+                <div class="chart-box">
+                    <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #fff;">
+                        <i class="fa-solid fa-chart-column" style="color: var(--accent-purple); margin-right: 6px;"></i> Subsurface Infrastructure Breakdown
+                    </h4>
+                    <canvas id="chart-infrastructure"></canvas>
+                </div>
+
+                <div class="chart-box">
+                    <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #fff;">
+                        <i class="fa-solid fa-shield-check" style="color: var(--accent-amber); margin-right: 6px;"></i> Cadastral Validation Status
+                    </h4>
+                    <canvas id="chart-validation"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             VIEW 10: CONFLICT HUB
+             ========================================================================== -->
+        <section id="view-conflicts" class="content-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-header-title">
+                        <i class="fa-solid fa-triangle-exclamation glow-text" style="color: var(--accent-rose);"></i>
+                        <span>Cadastral Conflict Detection & Resolution Hub</span>
+                    </h2>
+                    <p class="section-header-sub">
+                        Automated topological audit identifying air-rights overlaps, underground pipeline intrusions, boundary disputes, and duplicate vertical claims.
+                    </p>
+                </div>
+                <div>
+                    <button class="btn btn-emerald btn-sm" onclick="showToast('Exported Conflict Audit Report (PDF/GeoJSON)')">
+                        <i class="fa-solid fa-file-export"></i> Export Audit Report
+                    </button>
+                </div>
+            </div>
+
+            <div class="conflict-table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Conflict ID</th>
+                            <th>Category</th>
+                            <th>Affected ULPIN / Asset</th>
+                            <th>Spatial Violation Details</th>
+                            <th>Severity</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="conflict-table-body">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             FOOTER
+             ========================================================================== -->
+        <footer id="app-footer">
+            <div class="footer-top">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-weight: 700; color: #fff;">3D ULPIN – SIH 2026 PS 229 Prototype</span>
+                    <span class="badge badge-cyan">Next Gen 3D Cadastral Framework</span>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                    Ministry of Rural Development • Survey of India • Digital India
+                </div>
+            </div>
+            <div class="footer-disclaimer">
+                <strong>Prototype Notice:</strong> This web platform is an interactive demonstration prototype developed for Smart India Hackathon (SIH 2026) Problem Statement 229. Data and ULPIN values shown are simulated for demonstration purposes and should not be treated as official legal land records.
+            </div>
+        </footer>
+    </div>
+
+    <!-- ==========================================================================
+         MODAL: DIGITAL 3D PROPERTY CERTIFICATE
+         ========================================================================== -->
+    <div id="cert-modal" class="modal-backdrop" onclick="closeCertModal(event)">
+        <div class="certificate-sheet" onclick="event.stopPropagation()">
+            <div class="cert-watermark">3D ULPIN PROTOTYPE</div>
+
+            <div class="cert-header">
+                <div class="emblem-icon">
+                    <i class="fa-solid fa-landmark"></i>
+                </div>
+                <h2 style="font-size: 1.3rem; letter-spacing: 0.04em;">DIGITAL 3D PROPERTY IDENTIFICATION CERTIFICATE</h2>
+                <div style="font-size: 0.78rem; color: var(--accent-cyan); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px;">
+                    Department of Land Resources • 3D Bhu-Aadhaar National Register
+                </div>
+                <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 2px;">
+                    Prototype / Demonstration Record — Smart India Hackathon 2026
+                </div>
+            </div>
+
+            <div class="cert-grid">
+                <div>
+                    <div class="cert-field">
+                        <div class="cert-field-label">Unique 3D ULPIN (Bhu-Aadhaar)</div>
+                        <div class="cert-field-value mono" style="color: var(--accent-cyan); font-size: 1.15rem;" id="cert-ulpin">
+                            BR-DBH-W12-B024-F03-U031
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="cert-field">
+                            <div class="cert-field-label">Property Type</div>
+                            <div class="cert-field-value" id="cert-type">Apartment (Residential)</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-field-label">Building Name / ID</div>
+                            <div class="cert-field-value" id="cert-bld">BLD-DBH-024 (Skyline Towers)</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-field-label">Floor / Unit Number</div>
+                            <div class="cert-field-value" id="cert-floor-unit">Floor 03 • Flat U031</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-field-label">Volumetric Carpet Area</div>
+                            <div class="cert-field-value" id="cert-area">1,250 sq.ft.</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-field-label">Geographic Coordinates</div>
+                            <div class="cert-field-value mono" id="cert-coords">26.1542° N, 85.8972° E</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-field-label">Vertical Elevation</div>
+                            <div class="cert-field-value mono" id="cert-elev">+12.5m AMSL</div>
+                        </div>
+                    </div>
+
+                    <div class="cert-field" style="margin-top: 10px;">
+                        <div class="cert-field-label">Validation & Legal Status</div>
+                        <div class="cert-field-value" style="color: var(--accent-emerald);">
+                            <i class="fa-solid fa-shield-check"></i> VERIFIED & RECORDED IN 3D CADASTRAL REGISTRY
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); padding: 16px; border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
+                    <div id="cert-qrcode" style="background: #fff; padding: 6px; border-radius: 6px; margin-bottom: 10px;"></div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted); text-align: center;">
+                        Scan with NIC Bhu-Aadhaar Mobile App for Cryptographic Verification
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                <button class="btn btn-secondary btn-sm" onclick="closeCertModal()">
+                    <i class="fa-solid fa-xmark"></i> Close Preview
+                </button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-secondary btn-sm" onclick="window.print()">
+                        <i class="fa-solid fa-print"></i> Print Certificate
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="downloadCertSim()">
+                        <i class="fa-solid fa-download"></i> Download Official PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Popup Notification -->
+    <div id="toast-box">
+        <i class="fa-solid fa-circle-check" style="color: var(--accent-cyan); font-size: 1.1rem;"></i>
+        <span id="toast-msg">Operation successful!</span>
+    </div>
+
+    <!-- ==========================================================================
+         JAVASCRIPT APPLICATION LOGIC & THREE.JS 3D SCENE
+         ========================================================================== -->
+    <script>
+        /* ==========================================================================
+           DEMO DATASETS (EMBEDDED CLIENT-SIDE DATABASE)
+           ========================================================================== */
+        const DB = {
+            parcels: [
+                { id: "P401", mouza: "Lalbagh", area: "14,200 sq.ft", use: "Mixed Urban", coords: "26.1521° N, 85.8941° E", status: "Verified" },
+                { id: "P402", mouza: "Lalbagh", area: "18,600 sq.ft", use: "High-Density Residential", coords: "26.1534° N, 85.8955° E", status: "Verified" },
+                { id: "P403", mouza: "Mirzapur", area: "22,400 sq.ft", use: "Commercial Corridor", coords: "26.1548° N, 85.8962° E", status: "Verified" },
+                { id: "P408", mouza: "Lalbagh", area: "24,850 sq.ft", use: "Vertical Skyscraper", coords: "26.1542° N, 85.8972° E", status: "Verified" },
+                { id: "P409", mouza: "Benta", area: "12,100 sq.ft", use: "Public Infrastructure", coords: "26.1560° N, 85.8990° E", status: "Verified" }
+            ],
+            buildings: [
+                { id: "BLD-DBH-024", name: "Skyline Residency", parcel: "P408", floors: 8, units: 32, area: "24,850 sq.ft", coords: "26.1542° N, 85.8972° E", status: "Verified", baseUlpin: "BR-DBH-W12-B024" },
+                { id: "BLD-DBH-018", name: "Heritage Commercial Arcade", parcel: "P403", floors: 6, units: 24, area: "18,400 sq.ft", coords: "26.1548° N, 85.8962° E", status: "Verified", baseUlpin: "BR-DBH-W12-B018" },
+                { id: "BLD-DBH-031", name: "Apex Heights", parcel: "P402", floors: 12, units: 48, area: "38,200 sq.ft", coords: "26.1534° N, 85.8955° E", status: "Verified", baseUlpin: "BR-DBH-W12-B031" },
+                { id: "BLD-DBH-009", name: "Metro Central Plaza", parcel: "P401", floors: 5, units: 20, area: "15,100 sq.ft", coords: "26.1521° N, 85.8941° E", status: "Verified", baseUlpin: "BR-DBH-W12-B009" }
+            ],
+            properties: [
+                { ulpin: "BR-DBH-W12-B024-F03-U031", bld: "BLD-DBH-024", floor: "03", unit: "U031", type: "Apartment", area: "1,250 sq.ft", owner: "Rajesh Sharma", elev: "+7.0m", status: "Verified", hasConflict: false },
+                { ulpin: "BR-DBH-W12-B024-F03-U032", bld: "BLD-DBH-024", floor: "03", unit: "U032", type: "Apartment", area: "1,420 sq.ft", owner: "Priya Verma", elev: "+7.0m", status: "Verified", hasConflict: false },
+                { ulpin: "BR-DBH-W12-B024-F08-U081", bld: "BLD-DBH-024", floor: "08", unit: "U081", type: "Apartment", area: "2,100 sq.ft", owner: "Vikas Malhotra", elev: "+24.5m", status: "Verified", hasConflict: false },
+                { ulpin: "BR-DBH-W12-B024-B01-P004", bld: "BLD-DBH-024", floor: "B1", unit: "P004", type: "Parking", area: "150 sq.ft", owner: "Rajesh Sharma", elev: "-3.5m", status: "Verified", hasConflict: false },
+                { ulpin: "BR-DBH-W12-B018-F02-C201", bld: "BLD-DBH-018", floor: "02", unit: "C201", type: "Commercial", area: "850 sq.ft", owner: "TechSoft Solutions", elev: "+3.5m", status: "Verified", hasConflict: false },
+                { ulpin: "BR-DBH-W12-B031-F05-U052", bld: "BLD-DBH-031", floor: "05", unit: "U052", type: "Apartment", area: "1,350 sq.ft", owner: "Ananya Roy", elev: "+14.0m", status: "Verified", hasConflict: false },
+                { ulpin: "BR-DBH-W12-U00-WP1024", bld: "N/A", floor: "UG", unit: "WP-1024", type: "Underground", area: "450m length", owner: "Municipal Water Board", elev: "-4.2m", status: "Action Required", hasConflict: true }
+            ],
+            conflicts: [
+                { id: "CONF-001", type: "Underground Utility Conflict", ulpin: "BR-DBH-W12-U00-WP1024", details: "Piling overlap with 600mm Potable Water Pipeline at depth -4.2m", severity: "HIGH", resolved: false },
+                { id: "CONF-002", type: "Vertical Air-Rights Dispute", ulpin: "BR-DBH-W12-B024-RF-SOL", details: "Rooftop solar structure exceeds municipal height clearance by 1.8m", severity: "MEDIUM", resolved: false },
+                { id: "CONF-003", type: "Duplicate Property Identifier", ulpin: "BR-DBH-W12-B018-F02-C201", details: "Legacy 2D record overlaps with partitioned sub-unit C201B", severity: "HIGH", resolved: false },
+                { id: "CONF-004", type: "Subsurface Easement Encroachment", ulpin: "BR-DBH-W12-B031-B02-PK", details: "Basement wall encroaches 0.4m into telecom optical corridor", severity: "MEDIUM", resolved: false },
+                { id: "CONF-005", type: "Topology Coordinate Mismatch", ulpin: "BR-DBH-W12-P409-S01", details: "Survey 2D parcel boundary deviates 12cm from CORS RTK ground vector", severity: "LOW", resolved: true }
+            ]
+        };
+
+        /* ==========================================================================
+           NAVIGATION & VIEW SWITCHER
+           ========================================================================== */
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('data-target');
+                if (targetId) switchView(targetId);
+            });
+        });
+
+        function switchView(viewId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-view'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+
+            const targetSection = document.getElementById(viewId);
+            if (targetSection) {
+                targetSection.classList.add('active-view');
+                const matchingNav = document.querySelector(`.nav-item[data-target="${viewId}"]`);
+                if (matchingNav) matchingNav.classList.add('active');
+
+                // Trigger 3D canvas resize when opening map view
+                if (viewId === 'view-map' && window.resizeMain3D) {
+                    setTimeout(window.resizeMain3D, 50);
+                }
+                if (viewId === 'view-analytics') {
+                    initCharts();
+                }
+            }
+        }
+
+        // Sidebar Mobile Toggle
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const appSidebar = document.getElementById('app-sidebar');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                appSidebar.classList.toggle('open');
+            });
+        }
+
+        // Theme Toggle
+        document.getElementById('btn-theme-toggle').addEventListener('click', () => {
+            document.body.classList.toggle('theme-tactical');
+            showToast('Toggled High-Contrast Tactical GIS Theme');
+        });
+
+        /* ==========================================================================
+           THREE.JS 3D CADASTRAL MAP ENGINE
+           ========================================================================== */
+        let scene, camera, renderer, controls, raycaster, mouse;
+        let buildingMeshes = [];
+        let utilityMeshes = [];
+        let parcelLines = [];
+        let hoveredObject = null;
+        let selectedBuilding = null;
+
+        function initMain3DMap() {
+            const container = document.querySelector('.map-section-container');
+            const canvas = document.getElementById('main-3d-canvas');
+            if (!container || !canvas) return;
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x040814);
+            scene.fog = new THREE.FogExp2(0x040814, 0.012);
+
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(50, 45, 65);
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.maxPolarAngle = Math.PI / 2 + 0.1; // Allow slight underground tilt
+            controls.minDistance = 10;
+            controls.maxDistance = 180;
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xdde8ff, 0.7);
+            scene.add(ambientLight);
+
+            const sunLight = new THREE.DirectionalLight(0x00f0ff, 1.2);
+            sunLight.position.set(60, 100, 40);
+            sunLight.castShadow = true;
+            scene.add(sunLight);
+
+            const blueLight = new THREE.DirectionalLight(0x6366f1, 0.8);
+            blueLight.position.set(-60, -20, -40);
+            scene.add(blueLight);
+
+            // Ground Grid & Surface Plane
+            const gridHelper = new THREE.GridHelper(140, 70, 0x00f0ff, 0x132347);
+            gridHelper.position.y = 0;
+            scene.add(gridHelper);
+
+            // Create 3D City Elements
+            buildCityScene();
+
+            // Raycaster for Hover and Click
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            canvas.addEventListener('mousemove', onMapMouseMove);
+            canvas.addEventListener('click', onMapClick);
+
+            window.resizeMain3D = () => {
+                if (!container || !renderer || !camera) return;
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            };
+            window.addEventListener('resize', window.resizeMain3D);
+
+            // Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                
+                // Subtle rotation for holographic markers
+                scene.traverse((obj) => {
+                    if (obj.userData && obj.userData.isMarker) {
+                        obj.rotation.y += 0.02;
+                    }
+                });
+
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+
+        function buildCityScene() {
+            // 1. Surface Parcel Boundaries
+            const parcelData = [
+                { x: -25, z: -20, w: 22, d: 24, id: "P401" },
+                { x: 5, z: -20, w: 26, d: 24, id: "P402" },
+                { x: -25, z: 15, w: 22, d: 26, id: "P403" },
+                { x: 5, z: 15, w: 26, d: 26, id: "P408" }
+            ];
+
+            parcelData.forEach(p => {
+                const borderGeo = new THREE.BufferGeometry();
+                const verts = new Float32Array([
+                    p.x - p.w/2, 0.05, p.z - p.d/2,
+                    p.x + p.w/2, 0.05, p.z - p.d/2,
+                    p.x + p.w/2, 0.05, p.z + p.d/2,
+                    p.x - p.w/2, 0.05, p.z + p.d/2,
+                    p.x - p.w/2, 0.05, p.z - p.d/2
+                ]);
+                borderGeo.setAttribute('position', new THREE.BufferAttribute(verts, 3));
+                const borderMat = new THREE.LineBasicMaterial({ color: 0x3b82f6, linewidth: 2 });
+                const line = new THREE.Line(borderGeo, borderMat);
+                line.userData = { layer: 'parcels', id: p.id };
+                parcelLines.push(line);
+                scene.add(line);
+            });
+
+            // 2. Multi-Storey 3D Buildings
+            const buildingsData = [
+                { x: 5, z: 15, w: 14, d: 14, h: 28, floors: 8, id: "BLD-DBH-024", name: "Skyline Residency" },
+                { x: -25, z: 15, w: 12, d: 14, h: 20, floors: 6, id: "BLD-DBH-018", name: "Heritage Arcade" },
+                { x: 5, z: -20, w: 16, d: 14, h: 38, floors: 12, id: "BLD-DBH-031", name: "Apex Heights" },
+                { x: -25, z: -20, w: 12, d: 12, h: 16, floors: 5, id: "BLD-DBH-009", name: "Metro Plaza" }
+            ];
+
+            buildingsData.forEach(b => {
+                const group = new THREE.Group();
+                group.position.set(b.x, 0, b.z);
+
+                // Main Building Volume Glass Block
+                const bldGeo = new THREE.BoxGeometry(b.w, b.h, b.d);
+                const bldMat = new THREE.MeshPhongMaterial({
+                    color: 0x0f274a,
+                    emissive: 0x06142a,
+                    transparent: true,
+                    opacity: 0.85,
+                    shininess: 90
+                });
+                const bldMesh = new THREE.Mesh(bldGeo, bldMat);
+                bldMesh.position.y = b.h / 2;
+                bldMesh.castShadow = true;
+                bldMesh.receiveShadow = true;
+                bldMesh.userData = { isBuilding: true, id: b.id, name: b.name, floors: b.floors, data: b };
+                group.add(bldMesh);
+                buildingMeshes.push(bldMesh);
+
+                // Wireframe Edge Accents
+                const edges = new THREE.EdgesGeometry(bldGeo);
+                const lineMat = new THREE.LineBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.6 });
+                const wireframe = new THREE.LineSegments(edges, lineMat);
+                wireframe.position.y = b.h / 2;
+                group.add(wireframe);
+
+                // Floor Dividers (Horizontal Volumetric Slices)
+                const floorH = b.h / b.floors;
+                for (let f = 1; f < b.floors; f++) {
+                    const floorSlabGeo = new THREE.BoxGeometry(b.w + 0.2, 0.2, b.d + 0.2);
+                    const floorSlabMat = new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.4 });
+                    const slab = new THREE.Mesh(floorSlabGeo, floorSlabMat);
+                    slab.position.y = f * floorH;
+                    slab.userData = { layer: 'floors' };
+                    group.add(slab);
+                }
+
+                // Floating Holographic ULPIN Label Marker
+                const markerGeo = new THREE.OctahedronGeometry(0.8, 0);
+                const markerMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true });
+                const marker = new THREE.Mesh(markerGeo, markerMat);
+                marker.position.y = b.h + 2.5;
+                marker.userData = { isMarker: true };
+                group.add(marker);
+
+                scene.add(group);
+            });
+
+            // 3. Underground Pipelines & Conduits (Subsurface Tubes)
+            createUndergroundPipes();
+        }
+
+        function createUndergroundPipes() {
+            // Water Main (Blue Tube at -4.5m)
+            const waterCurve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(-45, -4.5, 15),
+                new THREE.Vector3(-10, -4.5, 15),
+                new THREE.Vector3(5, -4.5, 15),
+                new THREE.Vector3(45, -4.5, 15)
+            ]);
+            const waterGeo = new THREE.TubeGeometry(waterCurve, 30, 0.6, 8, false);
+            const waterMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x013054, roughness: 0.3 });
+            const waterMesh = new THREE.Mesh(waterGeo, waterMat);
+            waterMesh.userData = { layer: 'water', name: "Potable Water Main WP-1024", depth: "-4.5m" };
+            scene.add(waterMesh);
+            utilityMeshes.push(waterMesh);
+
+            // Electricity Grid (Red Tube at -2.5m)
+            const electCurve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(-25, -2.5, -45),
+                new THREE.Vector3(-25, -2.5, 0),
+                new THREE.Vector3(-25, -2.5, 45)
+            ]);
+            const electGeo = new THREE.TubeGeometry(electCurve, 20, 0.4, 8, false);
+            const electMat = new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0x5a0b0b });
+            const electMesh = new THREE.Mesh(electGeo, electMat);
+            electMesh.userData = { layer: 'electricity', name: "High-Voltage Conduit EC-3012", depth: "-2.5m" };
+            scene.add(electMesh);
+            utilityMeshes.push(electMesh);
+
+            // Telecom Fiber (Amber Tube at -1.8m)
+            const telecomCurve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(5, -1.8, -45),
+                new THREE.Vector3(5, -1.8, 45)
+            ]);
+            const telecomGeo = new THREE.TubeGeometry(telecomCurve, 20, 0.3, 8, false);
+            const telecomMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, emissive: 0x543603 });
+            const telecomMesh = new THREE.Mesh(telecomGeo, telecomMat);
+            telecomMesh.userData = { layer: 'telecom', name: "Optical Fiber FO-9081", depth: "-1.8m" };
+            scene.add(telecomMesh);
+            utilityMeshes.push(telecomMesh);
+        }
+
+        function onMapMouseMove(event) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(buildingMeshes);
+
+            if (intersects.length > 0) {
+                const target = intersects[0].object;
+                if (hoveredObject !== target) {
+                    if (hoveredObject) hoveredObject.material.emissive.setHex(0x06142a);
+                    hoveredObject = target;
+                    hoveredObject.material.emissive.setHex(0x004466);
+                    document.body.style.cursor = 'pointer';
+                }
+            } else {
+                if (hoveredObject) {
+                    hoveredObject.material.emissive.setHex(0x06142a);
+                    hoveredObject = null;
+                }
+                document.body.style.cursor = 'default';
+            }
+        }
+
+        function onMapClick(event) {
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(buildingMeshes);
+
+            if (intersects.length > 0) {
+                const bld = intersects[0].object.userData;
+                showBuildingInspector(bld.id);
+            }
+        }
+
+        function showBuildingInspector(bldId) {
+            const bld = DB.buildings.find(b => b.id === bldId) || DB.buildings[0];
+            selectedBuilding = bld;
+
+            document.getElementById('insp-name').innerText = bld.name + " (" + bld.id + ")";
+            document.getElementById('insp-ulpin').innerText = bld.baseUlpin + "-F03-U031";
+            document.getElementById('insp-floors').innerText = bld.floors + " Floors + 2 Basements";
+            document.getElementById('insp-units').innerText = bld.units + " Property Units";
+            document.getElementById('insp-area').innerText = bld.area;
+            document.getElementById('insp-coords').innerText = bld.coords;
+
+            const panel = document.getElementById('building-inspector-panel');
+            panel.style.display = 'block';
+        }
+
+        function closeInspector() {
+            document.getElementById('building-inspector-panel').style.display = 'none';
+        }
+
+        function openVerticalFromInspector() {
+            switchView('view-vertical');
+        }
+
+        // Camera Presets
+        function mapCameraPreset(type) {
+            if (type === '3d') {
+                gsapFlyCamera(50, 45, 65, 0, 5, 0);
+            } else if (type === '2d') {
+                gsapFlyCamera(0, 85, 0.1, 0, 0, 0);
+            } else if (type === 'underground') {
+                gsapFlyCamera(35, -20, 45, 0, -5, 0);
+            }
+        }
+
+        function resetMapCamera() {
+            mapCameraPreset('3d');
+        }
+
+        function gsapFlyCamera(tx, ty, tz, lx, ly, lz) {
+            camera.position.set(tx, ty, tz);
+            controls.target.set(lx, ly, lz);
+            controls.update();
+        }
+
+        // Layer Toggles
+        function toggleMapLayer(layerName) {
+            const isChecked = document.getElementById(`layer-${layerName}`).checked;
+            scene.traverse((obj) => {
+                if (obj.userData && obj.userData.layer === layerName) {
+                    obj.visible = isChecked;
+                }
+            });
+        }
+
+        /* ==========================================================================
+           MINI 3D CANVAS FOR DASHBOARD
+           ========================================================================== */
+        function initMiniDashboard3D() {
+            const canvas = document.getElementById('mini-3d-canvas');
+            if (!canvas) return;
+
+            const miniScene = new THREE.Scene();
+            miniScene.background = new THREE.Color(0x060c1c);
+
+            const miniCamera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 500);
+            miniCamera.position.set(30, 25, 35);
+
+            const miniRenderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            miniRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const miniControls = new THREE.OrbitControls(miniCamera, miniRenderer.domElement);
+            miniControls.autoRotate = true;
+            miniControls.autoRotateSpeed = 1.2;
+            miniControls.enableZoom = false;
+
+            const light = new THREE.DirectionalLight(0x00f0ff, 1.5);
+            light.position.set(20, 40, 20);
+            miniScene.add(light);
+            miniScene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+            // Small voxel city representation
+            const grid = new THREE.GridHelper(60, 30, 0x00f0ff, 0x132347);
+            miniScene.add(grid);
+
+            for (let i = 0; i < 7; i++) {
+                const h = 6 + Math.random() * 16;
+                const geo = new THREE.BoxGeometry(4, h, 4);
+                const mat = new THREE.MeshPhongMaterial({ color: 0x0a2a54, wireframe: false });
+                const m = new THREE.Mesh(geo, mat);
+                m.position.set((i % 3 - 1) * 9, h / 2, Math.floor(i / 3 - 1) * 9);
+                miniScene.add(m);
+
+                const edges = new THREE.EdgesGeometry(geo);
+                const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x00f0ff }));
+                line.position.copy(m.position);
+                miniScene.add(line);
+            }
+
+            function animateMini() {
+                requestAnimationFrame(animateMini);
+                miniControls.update();
+                miniRenderer.render(miniScene, miniCamera);
+            }
+            animateMini();
+        }
+
+        /* ==========================================================================
+           ULPIN GENERATOR & QR CODE
+           ========================================================================== */
+        let qrCodeObj = null;
+
+        function autoUpdateULPIN() {
+            const state = document.getElementById('inp-state').value;
+            const dist = document.getElementById('inp-district').value.toUpperCase();
+            const ward = document.getElementById('inp-ward').value.toUpperCase();
+            const bld = document.getElementById('inp-bld').value.toUpperCase();
+            const floor = document.getElementById('inp-floor').value;
+            const unit = document.getElementById('inp-unit').value.toUpperCase();
+
+            const formatted = `${state}-${dist}-${ward}-${bld}-${floor}-${unit}`;
+            document.getElementById('display-generated-ulpin').innerText = formatted;
+            generateQR(formatted);
+        }
+
+        function handleGenerateULPIN(e) {
+            e.preventDefault();
+            autoUpdateULPIN();
+            showToast('3D ULPIN Generated Successfully!');
+
+            // Celebrate with confetti
+            if (window.confetti) {
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.7 }
+                });
+            }
+        }
+
+        function generateQR(text) {
+            const qrContainer = document.getElementById('qrcode');
+            if (!qrContainer) return;
+            qrContainer.innerHTML = '';
+            qrCodeObj = new QRCode(qrContainer, {
+                text: text,
+                width: 124,
+                height: 124,
+                colorDark: "#040915",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function copyULPIN() {
+            const text = document.getElementById('display-generated-ulpin').innerText;
+            copyText(text, '3D ULPIN copied to clipboard!');
+        }
+
+        function copyText(text, msg) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(msg || 'Copied to clipboard!');
+            });
+        }
+
+        /* ==========================================================================
+           PROPERTY SEARCH LOGIC
+           ========================================================================== */
+        function renderSearchResults(items) {
+            const container = document.getElementById('search-results-container');
+            if (!container) return;
+
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted);">
+                        <i class="fa-solid fa-folder-open" style="font-size: 2.5rem; color: var(--text-dim); margin-bottom: 12px;"></i>
+                        <p>No matching property records found in 3D Cadastral registry.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = items.map(p => `
+                <div class="property-card">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span class="badge ${p.hasConflict ? 'badge-rose' : 'badge-cyan'}">
+                                ${p.type} ${p.hasConflict ? '• CONFLICT' : ''}
+                            </span>
+                            <span class="mono" style="font-size: 0.75rem; color: var(--text-muted);">${p.elev}</span>
+                        </div>
+                        <h4 style="font-size: 1.05rem; margin-bottom: 2px;">Unit ${p.unit} (${p.bld})</h4>
+                        <div class="mono" style="color: var(--accent-cyan); font-size: 0.78rem; word-break: break-all; margin-bottom: 12px;">
+                            ${p.ulpin}
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+                            <div><strong>Owner:</strong> ${p.owner}</div>
+                            <div><strong>Area:</strong> ${p.area}</div>
+                            <div><strong>Floor:</strong> ${p.floor}</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 8px; margin-top: 16px;">
+                        <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="viewPropertyInModal('${p.ulpin}')">
+                            <i class="fa-solid fa-certificate"></i> Certificate
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="switchView('view-map')">
+                            <i class="fa-solid fa-cube"></i> 3D Locate
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handlePropertySearch() {
+            const query = document.getElementById('prop-search-query').value.toLowerCase().trim();
+            if (!query) {
+                renderSearchResults(DB.properties);
+                return;
+            }
+
+            const filtered = DB.properties.filter(p => 
+                p.ulpin.toLowerCase().includes(query) ||
+                p.bld.toLowerCase().includes(query) ||
+                p.unit.toLowerCase().includes(query) ||
+                p.owner.toLowerCase().includes(query) ||
+                p.type.toLowerCase().includes(query)
+            );
+            renderSearchResults(filtered);
+        }
+
+        function filterChipSearch(type) {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (type === 'ALL') {
+                renderSearchResults(DB.properties);
+            } else if (type === 'Conflict') {
+                renderSearchResults(DB.properties.filter(p => p.hasConflict));
+            } else {
+                renderSearchResults(DB.properties.filter(p => p.type.toLowerCase().includes(type.toLowerCase())));
+            }
+        }
+
+        /* ==========================================================================
+           VERTICAL EXPLORER INTERACTION
+           ========================================================================== */
+        function selectFloorLevel(floorCode, title, elevation, category) {
+            document.querySelectorAll('.floor-btn').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            document.getElementById('stage-floor-title').innerText = `${floorCode} Level Overview`;
+            document.getElementById('stage-floor-sub').innerText = `Elevation: ${elevation >= 0 ? '+' : ''}${elevation}m AMSL • ${title}`;
+            document.getElementById('stage-floor-badge').innerText = `Type: ${category}`;
+        }
+
+        function selectUnitDetails(unitId, area, ulpin, owner, bounds) {
+            document.querySelectorAll('.unit-box').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            document.getElementById('unit-name').innerText = `Unit ${unitId}`;
+            document.getElementById('unit-ulpin').innerText = ulpin;
+            document.getElementById('unit-owner').innerText = owner;
+            document.getElementById('unit-area').innerText = area;
+            document.getElementById('unit-bounds').innerText = bounds;
+        }
+
+        /* ==========================================================================
+           UNDERGROUND X-RAY CANVAS
+           ========================================================================== */
+        function initUndergroundCanvas() {
+            const canvas = document.getElementById('underground-canvas');
+            if (!canvas) return;
+
+            const ugScene = new THREE.Scene();
+            ugScene.background = new THREE.Color(0x02050f);
+
+            const ugCamera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 300);
+            ugCamera.position.set(25, -10, 35);
+
+            const ugRenderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            ugRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const ugControls = new THREE.OrbitControls(ugCamera, ugRenderer.domElement);
+            ugControls.target.set(0, -8, 0);
+
+            ugScene.add(new THREE.AmbientLight(0xffffff, 0.8));
+
+            // Surface plane transparent grid
+            const surfaceGrid = new THREE.GridHelper(50, 20, 0x00f0ff, 0x132347);
+            surfaceGrid.position.y = 0;
+            ugScene.add(surfaceGrid);
+
+            // Subsurface Pipes
+            const pipes = [
+                { y: -4.2, color: 0x0284c7, r: 0.8, name: "Water Main" },
+                { y: -8.5, color: 0xa855f7, r: 1.2, name: "Sewer Trunk" },
+                { y: -2.0, color: 0xef4444, r: 0.5, name: "Power Conduits" },
+                { y: -16.0, color: 0x10b981, r: 2.5, name: "Metro Rail Tunnel" }
+            ];
+
+            pipes.forEach(p => {
+                const curve = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(-30, p.y, (Math.random() - 0.5) * 10),
+                    new THREE.Vector3(0, p.y, (Math.random() - 0.5) * 10),
+                    new THREE.Vector3(30, p.y, (Math.random() - 0.5) * 10)
+                ]);
+                const geo = new THREE.TubeGeometry(curve, 20, p.r, 8, false);
+                const mat = new THREE.MeshStandardMaterial({ color: p.color, roughness: 0.2 });
+                const mesh = new THREE.Mesh(geo, mat);
+                ugScene.add(mesh);
+            });
+
+            function animateUG() {
+                requestAnimationFrame(animateUG);
+                ugControls.update();
+                ugRenderer.render(ugScene, ugCamera);
+            }
+            animateUG();
+        }
+
+        function setUndergroundMode(mode) {
+            showToast(`Filter Subsurface View: ${mode.toUpperCase()}`);
+        }
+
+        /* ==========================================================================
+           AI / ML PIPELINE SIMULATION
+           ========================================================================== */
+        function runAIPipeline() {
+            const btn = document.getElementById('btn-run-ai');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Running Neural Validation...`;
+
+            const terminal = document.getElementById('ai-terminal');
+            terminal.innerHTML = `<div>[START] Executing 4-stage AI Cadastral Validation pipeline...</div>`;
+
+            let step = 1;
+            const interval = setInterval(() => {
+                if (step === 1) {
+                    document.getElementById('ai-prog-1').style.width = "98%";
+                    terminal.innerHTML += `<div>[MOD_01] Extracted 2,316 building polygons with 98.4% IoU.</div>`;
+                } else if (step === 2) {
+                    document.getElementById('ai-prog-2').style.width = "94%";
+                    terminal.innerHTML += `<div>[MOD_02] PointNet++ floor segmentation completed for 12,458 point cloud clusters.</div>`;
+                } else if (step === 3) {
+                    document.getElementById('ai-prog-3').style.width = "96%";
+                    terminal.innerHTML += `<div>[MOD_03] Vertical unit delineator resolved 8,742 3D volumetric parcels.</div>`;
+                } else if (step === 4) {
+                    document.getElementById('ai-prog-4').style.width = "97%";
+                    terminal.innerHTML += `<div style="color: #f59e0b;">[WARN] 2 Spatial clashes detected in Ward W12 subsurface pipeline.</div>`;
+                    terminal.innerHTML += `<div style="color: #10b981;">[SUCCESS] Pipeline completed in 3.42 seconds. All records indexed.</div>`;
+                    clearInterval(interval);
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-play"></i> Run AI Validation Pipeline`;
+                    showToast('AI Cadastral Validation Complete!');
+                }
+                step++;
+            }, 800);
+        }
+
+        /* ==========================================================================
+           GOVERNANCE CHARTS (CHART.JS)
+           ========================================================================== */
+        let chartsInitialized = false;
+
+        function initCharts() {
+            if (chartsInitialized) return;
+            chartsInitialized = true;
+
+            // Chart 1: Surface vs Vertical
+            new Chart(document.getElementById('chart-surface-vertical'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Surface Parcels (2D)', 'Vertical Apartments (3D)', 'Commercial Vertical Units', 'Underground Easements'],
+                    datasets: [{
+                        data: [12458, 6210, 2532, 1284],
+                        backgroundColor: ['#3b82f6', '#00f0ff', '#a855f7', '#f59e0b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
+                }
+            });
+
+            // Chart 2: Floor Distribution
+            new Chart(document.getElementById('chart-floors'), {
+                type: 'bar',
+                data: {
+                    labels: ['Basement', 'Ground', 'Floor 1-3', 'Floor 4-8', 'Floor 9-15', 'Penthouse'],
+                    datasets: [{
+                        label: 'Registered 3D Units',
+                        data: [1240, 2316, 4820, 3120, 980, 240],
+                        backgroundColor: '#00f0ff',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // Chart 3: Infrastructure Breakdown
+            new Chart(document.getElementById('chart-infrastructure'), {
+                type: 'polarArea',
+                data: {
+                    labels: ['Water Mains', 'Sewer Trunks', 'High-Voltage Power', 'Gas Pipelines', 'Fiber Optic', 'Metro Corridors'],
+                    datasets: [{
+                        data: [420, 310, 280, 140, 520, 85],
+                        backgroundColor: ['#0284c7', '#a855f7', '#ef4444', '#f59e0b', '#10b981', '#6366f1']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right', labels: { color: '#94a3b8' } } }
+                }
+            });
+
+            // Chart 4: Validation Status
+            new Chart(document.getElementById('chart-validation'), {
+                type: 'pie',
+                data: {
+                    labels: ['Fully Verified (3D)', 'Under Automated AI Review', 'Field Survey Audit Required', 'Disputed / Action Needed'],
+                    datasets: [{
+                        data: [96.8, 2.1, 0.8, 0.3],
+                        backgroundColor: ['#10b981', '#00f0ff', '#f59e0b', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
+                }
+            });
+        }
+
+        /* ==========================================================================
+           CONFLICT HUB TABLE
+           ========================================================================== */
+        function renderConflictTable() {
+            const tbody = document.getElementById('conflict-table-body');
+            if (!tbody) return;
+
+            tbody.innerHTML = DB.conflicts.map(c => `
+                <tr>
+                    <td class="mono" style="color: var(--accent-cyan);">${c.id}</td>
+                    <td><strong>${c.type}</strong></td>
+                    <td class="mono" style="font-size: 0.8rem;">${c.ulpin}</td>
+                    <td style="color: var(--text-muted);">${c.details}</td>
+                    <td>
+                        <span class="badge ${c.severity === 'HIGH' ? 'badge-rose' : c.severity === 'MEDIUM' ? 'badge-amber' : 'badge-emerald'}">
+                            ${c.severity}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary btn-sm" onclick="showToast('Initiated resolution workflow for ${c.id}')">
+                            <i class="fa-solid fa-wrench"></i> Resolve
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        /* ==========================================================================
+           DIGITAL CERTIFICATE MODAL
+           ========================================================================== */
+        function openCertificateModal() {
+            const ulpin = document.getElementById('display-generated-ulpin').innerText;
+            const bld = document.getElementById('inp-bld').value;
+            const floor = document.getElementById('inp-floor').value;
+            const unit = document.getElementById('inp-unit').value;
+            const type = document.getElementById('inp-type').value;
+
+            document.getElementById('cert-ulpin').innerText = ulpin;
+            document.getElementById('cert-type').innerText = type;
+            document.getElementById('cert-bld').innerText = `Building ${bld}`;
+            document.getElementById('cert-floor-unit').innerText = `Floor ${floor} • Flat ${unit}`;
+
+            const qrBox = document.getElementById('cert-qrcode');
+            qrBox.innerHTML = '';
+            new QRCode(qrBox, {
+                text: ulpin,
+                width: 110,
+                height: 110,
+                colorDark: "#040915",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            document.getElementById('cert-modal').classList.add('active');
+        }
+
+        function openCertificateModalFromCurrent() {
+            openCertificateModal();
+        }
+
+        function viewPropertyInModal(ulpin) {
+            const p = DB.properties.find(item => item.ulpin === ulpin) || DB.properties[0];
+            document.getElementById('cert-ulpin').innerText = p.ulpin;
+            document.getElementById('cert-type').innerText = p.type;
+            document.getElementById('cert-bld').innerText = p.bld;
+            document.getElementById('cert-floor-unit').innerText = `Floor ${p.floor} • Flat ${p.unit}`;
+            document.getElementById('cert-area').innerText = p.area;
+            document.getElementById('cert-elev').innerText = p.elev + " AMSL";
+
+            const qrBox = document.getElementById('cert-qrcode');
+            qrBox.innerHTML = '';
+            new QRCode(qrBox, {
+                text: p.ulpin,
+                width: 110,
+                height: 110,
+                colorDark: "#040915",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            document.getElementById('cert-modal').classList.add('active');
+        }
+
+        function closeCertModal(e) {
+            document.getElementById('cert-modal').classList.remove('active');
+        }
+
+        function downloadCertSim() {
+            showToast('Generating official 3D Land Title Certificate PDF...');
+            setTimeout(() => {
+                showToast('Certificate downloaded successfully!');
+            }, 1200);
+        }
+
+        function showPipelineModal(name, desc) {
+            showToast(`Data Node: ${name} — ${desc}`);
+        }
+
+        /* ==========================================================================
+           TOAST NOTIFICATION HELPER
+           ========================================================================== */
+        let toastTimeout = null;
+        function showToast(msg) {
+            const toast = document.getElementById('toast-box');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.style.display = 'flex';
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3200);
+        }
+
+        /* ==========================================================================
+           INITIALIZATION ON LOAD
+           ========================================================================== */
+        window.addEventListener('DOMContentLoaded', () => {
+            initMain3DMap();
+            initMiniDashboard3D();
+            initUndergroundCanvas();
+            renderSearchResults(DB.properties);
+            renderConflictTable();
+            autoUpdateULPIN();
+        });
+    </script>
+</body>
+</html>
